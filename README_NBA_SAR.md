@@ -4,9 +4,41 @@ An autonomous, enterprise-grade NBA Self-Assessment Report (SAR) & Outcome-Based
 
 ---
 
-## 🏛️ Domain-Driven Design (DDD) Architecture
+## 🔐 Super Admin & Role-Based Access Control
 
-The platform isolates business calculations, OBE attainment matrices, and state progression under `app/Domains/`:
+The platform features a secure authentication and authorization system with distinct entry/view points for each staff role:
+
+| Role | Email | Password | Responsibilities & Entry Points |
+| :--- | :--- | :--- | :--- |
+| **👑 Super Admin** | `admin@nba-obe.edu` | `Admin@123` | Full system access, create & manage staff accounts, department & program assignments, system settings. |
+| **🏛️ HOD (Dept Head)** | `hod.cse@niet-tech.edu.in` | `Password@123` | Department consolidation, faculty approval, matrix verification, SFR review. |
+| **🎓 Faculty / Coordinator** | `faculty@niet-tech.edu.in` | `Password@123` | Course mark entry (CIE/SEE), CO definition, CO-PO articulation, direct attainment. |
+| **🔍 IQAC / Principal** | `iqac@niet-tech.edu.in` | `Password@123` | Institutional review, financial expenditure sign-off, SAR locking & freezing. |
+| **📋 NBA Evaluator** | `evaluator@nba-obe.edu` | `Password@123` | External site visit evaluation, audit inspection, compliance verification. |
+
+---
+
+## 🖥️ Enterprise Multi-View Dashboard Structure
+
+Instead of cramming everything onto a single page, the dashboard is partitioned into dedicated modular workspace views:
+
+```
+Dashboard Navigation
+├── 📊 Executive Dashboard & KPI Scores  # 1000-point gauge, compliance predictor, 5 quick pillars
+├── 👥 Staff & Faculty Management       # Super Admin/HOD panel: Add staff, edit qualifications, toggle status
+├── 🏛️ Programs & Intake (UGT)          # Sanctioned intake, UGT1-UGT4 enrolment, graduation cohorts
+├── 🗺️ Articulation Matrix (CO-PO)      # Program master matrix & interactive course heatmap editor
+├── 🎯 Attainment Evaluation Engine     # CIE/SEE mark evaluation, survey scores, final PO1-PO12 radar
+├── 📐 Faculty SFR & FQI Simulators     # Real-time mathematical calculation simulators for Criterion 5
+├── 💰 Financial Budgets (Crit 10)      # CFY/CFYm1 recurring & non-recurring capital expenditure
+├── 📑 Criteria 1 - 10 Master Explorer  # Comprehensive self-assessment criteria breakdown
+├── 🛡️ SAR Workflow & Audit Trail       # State machine progression (Draft -> Dept -> IQAC -> Locked)
+└── 🖨️ Official Printable SAR Document  # Official Tier-II formatted NBA document with print stylesheets
+```
+
+---
+
+## 🏛️ Domain-Driven Design (DDD) Layout (`app/Domains/`)
 
 ```
 app/
@@ -32,76 +64,18 @@ app/
 
 ---
 
-## 🚀 Porting / Moving to Acadicron-ERP (`Acadicron-ERP-new`)
+## 🚀 Porting to Acadicron-ERP (`Acadicron-ERP-new`)
 
-This project was built to be **100% modular and decoupled**. When you want to port this into `Acadicron-ERP-new`:
-
-1. **Backend**:
-   - Copy `app/Domains/` directly into `Acadicron-ERP-new/app/Domains/` (or `app/Modules/NBA/`).
-   - Copy `app/Http/Controllers/Api/V1/` into `Acadicron-ERP-new/app/Http/Controllers/Api/V1/`.
-   - Copy the migrations in `database/migrations/2025_01_01_000001_...` to `Acadicron-ERP-new/database/migrations/`.
-   - Add the routes from `routes/api.php` to Acadicron's API route file.
-
-2. **Frontend**:
-   - Copy `resources/js/components/` into Acadicron's Vue component folder.
-   - All components interact exclusively through the `/api/v1/nba/...` REST endpoints, meaning no tight coupling with Blade session logic or database drivers!
-
----
-
-## 📐 Mathematical Engines & Formulas Implemented
-
-### 1. Student-Faculty Ratio ($SFR$) Engine
-$$SFR = \frac{N}{F} = \frac{UGT_1 + UGT_2 + UGT_3}{F}$$
-- **Evaluation Criteria**: $\le 15:1 \to 20\text{ Marks}$, $15:1 \text{ to } 20:1 \to 20 \times (15 / SFR)$, $> 25:1 \to 0\text{ Marks}$.
-
-### 2. Faculty Qualification Index ($FQI$) Engine
-$$FQI = 2.5 \times \left( \frac{10X + 4Y}{RF} \right)$$
-- $X$ = Regular Faculty with Ph.D.
-- $Y$ = Regular Faculty with M.Tech / M.E.
-- $RF$ = Required Faculty based on standard $SFR = 20:1$ ($RF = \lceil N / 20 \rceil$). Max marks = $25.0$.
-
-### 3. Cadre Proportion Ratio Engine
-- Standard Target Ratio: $1 : 2 : 6$ (Professors : Associate Professors : Assistant Professors).
-- Pro-rata calculation based on $AF_1 / RF_1, AF_2 / RF_2, AF_3 / RF_3$. Max marks = $25.0$.
-
-### 4. CO-PO Attainment Calculation Pipeline
-$$Final\_PO\_Attainment = (0.80 \times Direct\_Attainment) + (0.20 \times Indirect\_Attainment)$$
-- **Direct Attainment**: $20\% \text{ CIE (Internal Tests/Assignments)} + 80\% \text{ SEE (End Semester Exam)}$.
-- **Indirect Attainment**: $50\% \text{ Exit Survey} + 30\% \text{ Alumni Survey} + 20\% \text{ Employer Survey}$.
-- Aggregated across all courses using the Course-PO Articulation Correlation Matrix ($1, 2, 3$).
-
-### 5. SAR Workflow State Machine & Audit Trail
-```
-[DRAFT] ───> [DEPARTMENT_CONSOLIDATION] ───> [INSTITUTIONAL_REVIEW] ───> [APPROVED_LOCKED] ───> [ARCHIVED]
-```
-- Immutable event logging into `sar_audit_logs` tracking every state change, matrix update, and calculation run.
-
----
-
-## ⚡ Quick Start Instructions
-
-1. **Install & Prepare Database**:
-   ```bash
-   php artisan migrate --seed
-   ```
-2. **Build Frontend**:
-   ```bash
-   npm run build
-   # Or for hot module reload:
-   npm run dev
-   ```
-3. **Start Server**:
-   ```bash
-   php artisan serve
-   ```
-4. Open your browser at `http://localhost:8000`.
+1. **Backend**: Copy `app/Domains/` and `app/Http/Controllers/Api/V1/` into `Acadicron-ERP-new/app/`.
+2. **Migrations**: Copy `database/migrations/2025_01_01_000001_...` to Acadicron.
+3. **Frontend**: Copy `resources/js/components/` into Acadicron's Vue component structure. All components communicate via `/api/v1/...` REST APIs.
 
 ---
 
 ## 🧪 Automated Test Suite
 
-Run the full suite of automated tests verifying all calculation engines and APIs:
+Run the full suite of automated tests verifying all calculation engines, state transitions, authentication, and staff management:
 ```bash
 php artisan test
 ```
-All 10 feature tests pass with 51 assertions.
+**13 Feature & Unit Tests passing with 62 assertions.**

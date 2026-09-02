@@ -167,4 +167,73 @@ class NbaSarCalculationTest extends TestCase
             ],
         ]);
     }
+
+    public function test_super_admin_can_login_and_fetch_current_profile(): void
+    {
+        $loginResponse = $this->postJson('/api/v1/auth/login', [
+            'email' => 'admin@nba-obe.edu',
+            'password' => 'Admin@123',
+        ]);
+
+        $loginResponse->assertStatus(200);
+        $loginResponse->assertJson([
+            'success' => true,
+            'user' => [
+                'email' => 'admin@nba-obe.edu',
+                'role' => 'Super Admin',
+            ],
+        ]);
+
+        $meResponse = $this->getJson('/api/v1/auth/me');
+        $meResponse->assertStatus(200);
+        $meResponse->assertJson([
+            'success' => true,
+            'authenticated' => true,
+        ]);
+    }
+
+    public function test_super_admin_can_create_new_staff_member(): void
+    {
+        $response = $this->postJson('/api/v1/staff', [
+            'name' => 'Dr. Vikramaditya Sen',
+            'email' => 'vikram@niet-tech.edu.in',
+            'password' => 'SecurePass@123',
+            'role' => 'Faculty',
+            'designation' => 'Assistant Professor',
+            'highest_degree' => 'Ph.D. Computer Science',
+            'teaching_experience_years' => 5,
+        ]);
+
+        $response->assertStatus(201);
+        $response->assertJson([
+            'success' => true,
+            'user' => [
+                'email' => 'vikram@niet-tech.edu.in',
+                'role' => 'Faculty',
+            ],
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'vikram@niet-tech.edu.in',
+            'role' => 'Faculty',
+        ]);
+    }
+
+    public function test_super_admin_can_toggle_staff_active_status(): void
+    {
+        $user = \App\Models\User::where('email', 'faculty@niet-tech.edu.in')->first();
+        $this->assertTrue($user->is_active);
+
+        $response = $this->postJson("/api/v1/staff/{$user->id}/toggle-status");
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true,
+            'is_active' => false,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'is_active' => false,
+        ]);
+    }
 }

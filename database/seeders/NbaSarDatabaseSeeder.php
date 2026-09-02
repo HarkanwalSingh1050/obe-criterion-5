@@ -49,6 +49,61 @@ class NbaSarDatabaseSeeder extends Seeder
             'hod_email' => 'hod.cse@niet-tech.edu.in',
         ]);
 
+        // Default System Users for Roles
+        \App\Models\User::create([
+            'name' => 'System Super Admin',
+            'email' => 'admin@nba-obe.edu',
+            'password' => \Illuminate\Support\Facades\Hash::make('Admin@123'),
+            'role' => \App\Models\User::ROLE_SUPER_ADMIN,
+            'designation' => 'Chief Technology Officer & Admin',
+            'phone' => '+91 9900112233',
+            'is_active' => true,
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Dr. Arvind Mehra',
+            'email' => 'hod.cse@niet-tech.edu.in',
+            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+            'role' => \App\Models\User::ROLE_HOD,
+            'department_id' => $dept->id,
+            'designation' => 'Professor & Head of Department',
+            'faculty_code' => 'FAC-CSE-001',
+            'phone' => '+91 9811223344',
+            'is_active' => true,
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Prof. Rohit Kulkarni',
+            'email' => 'faculty@niet-tech.edu.in',
+            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+            'role' => \App\Models\User::ROLE_FACULTY,
+            'department_id' => $dept->id,
+            'designation' => 'Associate Professor & Course Coordinator',
+            'faculty_code' => 'FAC-CSE-008',
+            'phone' => '+91 9822334455',
+            'is_active' => true,
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Dr. R. K. Sharma',
+            'email' => 'iqac@niet-tech.edu.in',
+            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+            'role' => \App\Models\User::ROLE_IQAC,
+            'designation' => 'Principal & IQAC Chairman',
+            'phone' => '+91 9833445566',
+            'is_active' => true,
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Prof. NBA Expert Committee',
+            'email' => 'evaluator@nba-obe.edu',
+            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+            'role' => \App\Models\User::ROLE_EVALUATOR,
+            'designation' => 'External Accreditation Peer Reviewer',
+            'phone' => '+91 9844556677',
+            'is_active' => true,
+        ]);
+
         // 2. Academic Years (CAY, CAYm1, CAYm2, CAYm3)
         $cay = AcademicYear::create(['name' => '2024-25', 'type' => 'CAY', 'start_year' => 2024, 'end_year' => 2025, 'is_current' => true]);
         $caym1 = AcademicYear::create(['name' => '2023-24', 'type' => 'CAYm1', 'start_year' => 2023, 'end_year' => 2024, 'is_current' => false]);
