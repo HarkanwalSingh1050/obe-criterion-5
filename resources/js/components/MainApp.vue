@@ -4,7 +4,18 @@
     <LoginView v-if="!currentUser" @authenticated="handleAuthenticated" />
 
     <!-- 2. If Authenticated -> Full Enterprise Multi-View Dashboard -->
-    <div v-else class="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-indigo-500 selection:text-white">
+    <div v-else class="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-indigo-500 selection:text-white relative overflow-hidden">
+      <!-- Ambient Floating Background Light Spheres & Blueprint Grid -->
+      <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <!-- Floating Orb 1 (Top-Left Indigo) -->
+        <div class="absolute -top-32 -left-32 w-[550px] h-[550px] bg-indigo-600/10 rounded-full blur-[120px] animate-float-1"></div>
+        <!-- Floating Orb 2 (Center-Right Slate/Blue) -->
+        <div class="absolute top-1/3 -right-24 w-[480px] h-[480px] bg-blue-600/8 rounded-full blur-[140px] animate-float-2"></div>
+        <!-- Floating Orb 3 (Bottom-Center Emerald/Indigo) -->
+        <div class="absolute -bottom-32 left-1/3 w-[520px] h-[520px] bg-emerald-600/8 rounded-full blur-[130px] animate-float-3"></div>
+        <!-- Blueprint Grid Pattern Overlay -->
+        <div class="absolute inset-0 bg-ambient-grid opacity-60"></div>
+      </div>
       <!-- Collapsible Sidebar -->
       <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 z-40">
         <!-- Sidebar Brand Header -->

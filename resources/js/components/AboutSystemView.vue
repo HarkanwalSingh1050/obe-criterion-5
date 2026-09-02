@@ -1,8 +1,7 @@
 <template>
   <div class="space-y-8 max-w-6xl mx-auto pb-12">
     <!-- Header Hero Banner -->
-    <div class="glass-card rounded-2xl p-8 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 relative overflow-hidden shadow-2xl">
-      <div class="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="glass-card rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 relative overflow-hidden shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div class="relative z-10 space-y-3">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-500/20 border border-indigo-500/40 text-xs font-semibold text-indigo-300">
           <AppIcon name="info" size="14" />
@@ -11,9 +10,18 @@
         <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white">
           Visual Data Flow Graph & How OBE Calculations Work
         </h2>
-        <p class="text-sm text-slate-300 max-w-3xl leading-relaxed">
+        <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">
           Interactive flow diagram showing the complete end-to-end data pipeline from initial syllabus definition and student mark logging to dual-stream attainment calculations and final Tier-II NBA compliance accreditation.
         </p>
+      </div>
+
+      <!-- Action Button to Trigger Full Animation Modal -->
+      <div class="shrink-0 relative z-10">
+        <button @click="openAnimationModal"
+                class="px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white text-xs font-bold shadow-xl shadow-indigo-600/30 flex items-center gap-2.5 transition transform hover:scale-105 active:scale-95">
+          <span class="text-base">🎬</span>
+          <span>Play Animated System Simulation</span>
+        </button>
       </div>
     </div>
 
@@ -42,12 +50,13 @@
               Click any stage in the flow graph below to inspect the mathematical logic, input requirements, and live destination.
             </p>
           </div>
-          <span class="text-xs text-emerald-400 font-mono bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-            Interactive Visual Model
-          </span>
+          <button @click="openAnimationModal" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1.5 self-start sm:self-auto">
+            <span>🎬 Run Animation Demo</span>
+            <span>→</span>
+          </button>
         </div>
 
-        <!-- Visual Flow Graph Nodes & Animated Connectors -->
+        <!-- Visual Flow Graph Nodes -->
         <div class="grid grid-cols-1 md:grid-cols-6 gap-3 relative">
           <!-- Flow Step 1 -->
           <div @click="selectedNode = 'step1'"
@@ -456,6 +465,296 @@
         </div>
       </div>
     </div>
+
+    <!-- 🎬 FULL SCREEN INTERACTIVE ANIMATED SYSTEM SIMULATION MODAL -->
+    <div v-if="showAnimationModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md">
+      <div class="glass-card bg-slate-900 border border-indigo-500/40 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+        <!-- Modal Top Bar -->
+        <div class="px-6 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-base shadow-md">
+              🎬
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white">Live OBE & NBA SAR Data Pipeline Simulation</h3>
+              <p class="text-[11px] text-slate-400">Interactive visual walkthrough of calculation logic and accreditation flow</p>
+            </div>
+          </div>
+          <button @click="closeAnimationModal" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+            ✕
+          </button>
+        </div>
+
+        <!-- Simulation Stepper Navigation Bar -->
+        <div class="px-6 py-3 bg-slate-950/60 border-b border-slate-800 flex items-center justify-between text-xs">
+          <!-- Step Indicators -->
+          <div class="flex items-center space-x-1.5 sm:space-x-3 overflow-x-auto py-1">
+            <button v-for="(step, idx) in 6" :key="step"
+                    @click="goToStep(step)"
+                    class="px-2.5 py-1 rounded-md font-mono text-xs transition flex items-center gap-1.5"
+                    :class="animStep === step ? 'bg-indigo-600 text-white font-bold shadow-md' : 'bg-slate-800/80 text-slate-400 hover:text-slate-200'">
+              <span>{{ step }}</span>
+              <span class="hidden sm:inline text-[10px]">{{ stepTitles[step-1] }}</span>
+            </button>
+          </div>
+
+          <!-- Playback Controls -->
+          <div class="flex items-center space-x-2 shrink-0">
+            <button @click="prevAnimStep" :disabled="animStep === 1"
+                    class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-30">
+              ⏮
+            </button>
+            <button @click="toggleAutoPlay"
+                    class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5"
+                    :class="isPlaying ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-emerald-600 hover:bg-emerald-500 text-white'">
+              <span>{{ isPlaying ? '⏸ Pause' : '▶ Play' }}</span>
+            </button>
+            <button @click="nextAnimStep" :disabled="animStep === 6"
+                    class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-30">
+              ⏭
+            </button>
+          </div>
+        </div>
+
+        <!-- Simulation Dynamic Canvas Body -->
+        <div class="p-6 overflow-y-auto flex-1 space-y-6 bg-slate-900/90">
+          <!-- Stage 1 Animation: Academics & Intake Base -->
+          <div v-if="animStep === 1" class="space-y-4 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[10px] font-mono uppercase font-bold text-indigo-400">Step 1 of 6 • Foundation</span>
+                <h4 class="text-base font-bold text-white mt-0.5">Cohort Enrolment & Student Base Population ($N$)</h4>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-300 text-xs font-mono font-bold border border-indigo-500/30">
+                N = 375 Students
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 transition transform hover:scale-105">
+                <div class="text-[10px] uppercase text-slate-400 font-bold">1st Year (UGT1)</div>
+                <div class="text-2xl font-black text-white">120</div>
+                <div class="text-[10px] text-indigo-400 font-semibold">Sanctioned Intake</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 transition transform hover:scale-105">
+                <div class="text-[10px] uppercase text-slate-400 font-bold">2nd Year (UGT2)</div>
+                <div class="text-2xl font-black text-white">128</div>
+                <div class="text-[10px] text-emerald-400 font-semibold">+12 Lateral Entry</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 transition transform hover:scale-105">
+                <div class="text-[10px] uppercase text-slate-400 font-bold">3rd Year (UGT3)</div>
+                <div class="text-2xl font-black text-white">125</div>
+                <div class="text-[10px] text-indigo-400 font-semibold">Senior Core</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 transition transform hover:scale-105">
+                <div class="text-[10px] uppercase text-slate-400 font-bold">4th Year (UGT4)</div>
+                <div class="text-2xl font-black text-white">122</div>
+                <div class="text-[10px] text-purple-400 font-semibold">Graduation Batch</div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-indigo-950/20 border border-indigo-500/30 text-xs text-slate-300 flex items-center gap-3">
+              <div class="text-2xl">💡</div>
+              <div>
+                <strong>NBA Population Rule:</strong> Student base $N = UGT_2 + UGT_3 + UGT_4 = 128 + 125 + 122 = 375$. This population is propagated across faculty ratios (SFR, FQI) and success rate calculations.
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage 2 Animation: Curriculum & COs -->
+          <div v-if="animStep === 2" class="space-y-4 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[10px] font-mono uppercase font-bold text-indigo-400">Step 2 of 6 • Curriculum Design</span>
+                <h4 class="text-base font-bold text-white mt-0.5">Course Outcomes (CO1 to CO5) & Bloom Taxonomy</h4>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-300 text-xs font-mono font-bold border border-indigo-500/30">
+                CS301 to CS801 Active
+              </span>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div v-for="i in 4" :key="'co'+i" class="p-3 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between transition hover:border-indigo-500/40">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-300 font-bold flex items-center justify-center font-mono text-xs">CO{{ i }}</span>
+                  <div>
+                    <div class="font-bold text-white">CS301 - Data Structures Objective {{ i }}</div>
+                    <div class="text-[11px] text-slate-400">Pass Criteria: Target ≥ 65% Marks in CIE/SEE</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold"
+                        :class="i === 1 ? 'bg-blue-500/20 text-blue-300' : (i === 2 ? 'bg-indigo-500/20 text-indigo-300' : (i === 3 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-purple-500/20 text-purple-300'))">
+                    Bloom: {{ ['Remember', 'Understand', 'Apply', 'Analyze'][i-1] }}
+                  </span>
+                  <span class="text-xs font-mono font-bold text-emerald-400">Target 2.5/3.0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage 3 Animation: CO-PO Matrix Heatmap -->
+          <div v-if="animStep === 3" class="space-y-4 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[10px] font-mono uppercase font-bold text-indigo-400">Step 3 of 6 • Matrix Articulation</span>
+                <h4 class="text-base font-bold text-white mt-0.5">CO-PO & PSO Correlation Articulation Heatmap</h4>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-300 text-xs font-mono font-bold border border-indigo-500/30">
+                1=Low, 2=Med, 3=High
+              </span>
+            </div>
+
+            <!-- Mini Matrix Visual -->
+            <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-2">
+              <table class="w-full text-center text-xs">
+                <thead>
+                  <tr class="text-[10px] text-slate-400 uppercase font-bold">
+                    <th class="p-2 text-left">Outcome</th>
+                    <th v-for="p in ['PO1', 'PO2', 'PO3', 'PO5', 'PO9', 'PO12', 'PSO1', 'PSO2']" :key="p" class="p-1.5">{{ p }}</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 font-mono text-xs">
+                  <tr v-for="(co, idx) in ['CO1', 'CO2', 'CO3', 'CO4', 'CO5']" :key="co">
+                    <td class="p-2 text-left font-bold text-indigo-300">{{ co }}</td>
+                    <td v-for="val in [3, 3, 2, 3, 2, 2, 2, 2]" :key="val+idx" class="p-1.5">
+                      <span class="w-6 h-6 rounded flex items-center justify-center font-bold text-[11px] mx-auto"
+                            :class="val === 3 ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 animate-pulse' : 'bg-indigo-500/20 text-indigo-300'">
+                        {{ val }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="text-xs text-slate-300">
+              ⚡ <strong>Dynamic Weighted Articulation:</strong> The matrix creates mathematical bridges between course tests and the 12 Washington Accord graduate attributes.
+            </p>
+          </div>
+
+          <!-- Stage 4 Animation: Dual Attainment Engine -->
+          <div v-if="animStep === 4" class="space-y-4 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[10px] font-mono uppercase font-bold text-emerald-400">Step 4 of 6 • Dual Attainment</span>
+                <h4 class="text-base font-bold text-white mt-0.5">Direct Marks + Indirect Surveys Integration</h4>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30">
+                Final: 2.62 / 3.00 (87.3%)
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <!-- Direct Stream -->
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                <div class="font-bold text-indigo-300 flex items-center justify-between">
+                  <span>Stream A: Direct Assessments (80%)</span>
+                  <span class="font-mono text-white">2.64 / 3.0</span>
+                </div>
+                <div class="space-y-1 font-mono text-[11px] text-slate-400">
+                  <div>• CIE (Internal Tests 1 & 2): 20% weight $\to$ 2.80</div>
+                  <div>• SEE (End-Semester Exam): 80% weight $\to$ 2.60</div>
+                  <div class="text-indigo-400 font-bold">Direct = (0.20 × 2.80) + (0.80 × 2.60) = 2.64</div>
+                </div>
+              </div>
+
+              <!-- Indirect Stream -->
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                <div class="font-bold text-emerald-300 flex items-center justify-between">
+                  <span>Stream B: Indirect Surveys (20%)</span>
+                  <span class="font-mono text-white">2.55 / 3.0</span>
+                </div>
+                <div class="space-y-1 font-mono text-[11px] text-slate-400">
+                  <div>• Graduate Exit Surveys: 110 respondents $\to$ 2.65</div>
+                  <div>• Alumni & Employer Surveys: 105 respondents $\to$ 2.50</div>
+                  <div class="text-emerald-400 font-bold">Indirect Survey Rating = 2.55 / 3.0</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 font-mono text-center text-xs text-emerald-300 font-bold">
+              Final Attainment = (0.80 × 2.64 Direct) + (0.20 × 2.55 Indirect) = 2.62 / 3.00 (Criterion 3.3 Attained!)
+            </div>
+          </div>
+
+          <!-- Stage 5 Animation: Faculty & Governance Indices -->
+          <div v-if="animStep === 5" class="space-y-4 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[10px] font-mono uppercase font-bold text-indigo-400">Step 5 of 6 • Governance & Ratios</span>
+                <h4 class="text-base font-bold text-white mt-0.5">Faculty Indices (SFR, FQI, Cadre) & 3-Yr Expenditure</h4>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-indigo-500/10 text-indigo-300 text-xs font-mono font-bold border border-indigo-500/30">
+                Criterion 5 & 10 Validated
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs">
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Student-Faculty Ratio (SFR)</div>
+                <div class="text-2xl font-black text-white">16.9 : 1</div>
+                <div class="text-emerald-400 font-semibold font-mono">17.6 / 20.0 Marks</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Faculty Qualification (FQI)</div>
+                <div class="text-2xl font-black text-white">22.8 / 25.0</div>
+                <div class="text-emerald-400 font-semibold font-mono">7 Ph.D. + 15 M.Tech</div>
+              </div>
+              <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                <div class="text-[10px] text-slate-400 font-bold uppercase">Budget Utilization</div>
+                <div class="text-2xl font-black text-white">94.3%</div>
+                <div class="text-emerald-400 font-semibold font-mono">28.0 / 30.0 Marks</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage 6 Animation: 1000-Point SAR Freeze & Accreditation -->
+          <div v-if="animStep === 6" class="space-y-4 animate-fade-in">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-[10px] font-mono uppercase font-bold text-purple-400">Step 6 of 6 • Accreditation Freeze</span>
+                <h4 class="text-base font-bold text-white mt-0.5">1000-Point SAR Score Freeze & Tier-II Report Document</h4>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/40">
+                842.5 / 1000.0 Marks (84.3%)
+              </span>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-950 to-indigo-950/40 border border-emerald-500/40 text-center space-y-3">
+              <div class="inline-block p-2 rounded-full bg-emerald-500/20 text-emerald-400 text-2xl animate-bounce">
+                🏆
+              </div>
+              <h3 class="text-lg font-bold text-white">Accreditation Verdict: 6-Year Full Accreditation</h3>
+              <p class="text-xs text-slate-300 max-w-lg mx-auto">
+                All 10 Criteria exceed the 750-mark threshold. SAR locked with immutable cryptographic audit trail. Official printable Tier-II document ready for peer review committee.
+              </p>
+
+              <div class="pt-2 flex items-center justify-center gap-3">
+                <button @click="$emit('navigate', 'document'); closeAnimationModal()"
+                        class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+                  <span>📄 Open Official Printable SAR</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer with Navigation to active live module -->
+        <div class="px-6 py-3.5 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs">
+          <div class="text-slate-400">
+            <span>Current Module: </span>
+            <strong class="text-white">{{ activeNodeData.title }}</strong>
+          </div>
+
+          <button @click="$emit('navigate', activeNodeData.targetView); closeAnimationModal()"
+                  class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold flex items-center gap-1.5 transition">
+            <span>Jump to Live Module</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -469,6 +768,11 @@ export default {
     return {
       activeTab: 'flow_graph',
       selectedNode: 'step4',
+      showAnimationModal: false,
+      animStep: 1,
+      isPlaying: true,
+      timer: null,
+      stepTitles: ['Academics', 'Courses', 'Matrix', 'Attainment', 'Faculty & Budget', '1000-Pt SAR'],
       guideTabs: [
         { id: 'flow_graph', label: 'Interactive Data Flow Graph', icon: 'matrix' },
         { id: 'workflow_guide', label: '7-Step SAR Workflow', icon: 'workflow' },
@@ -530,6 +834,64 @@ export default {
   computed: {
     activeNodeData() {
       return this.nodesData[this.selectedNode] || this.nodesData.step4;
+    },
+  },
+  beforeUnmount() {
+    this.stopTimer();
+  },
+  methods: {
+    openAnimationModal() {
+      this.showAnimationModal = true;
+      this.animStep = 1;
+      this.selectedNode = 'step1';
+      this.startTimer();
+    },
+    closeAnimationModal() {
+      this.showAnimationModal = false;
+      this.stopTimer();
+    },
+    startTimer() {
+      this.stopTimer();
+      this.isPlaying = true;
+      this.timer = setInterval(() => {
+        if (this.animStep < 6) {
+          this.animStep++;
+        } else {
+          this.animStep = 1;
+        }
+        this.selectedNode = 'step' + this.animStep;
+      }, 3500);
+    },
+    stopTimer() {
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+      this.isPlaying = false;
+    },
+    toggleAutoPlay() {
+      if (this.isPlaying) {
+        this.stopTimer();
+      } else {
+        this.startTimer();
+      }
+    },
+    goToStep(step) {
+      this.animStep = step;
+      this.selectedNode = 'step' + step;
+      if (this.isPlaying) {
+        this.startTimer();
+      }
+    },
+    nextAnimStep() {
+      if (this.animStep < 6) {
+        this.goToStep(this.animStep + 1);
+      }
+    },
+    prevAnimStep() {
+      if (this.animStep > 1) {
+        this.goToStep(this.animStep - 1);
+      }
     },
   },
 };

@@ -1,8 +1,10 @@
 <template>
   <div class="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden font-sans selection:bg-indigo-500 selection:text-white">
-    <!-- Ambient glowing backgrounds -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- Ambient glowing backgrounds & floating animation orbs -->
+    <div class="absolute -top-32 -left-32 w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[140px] animate-float-1 pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-[600px] h-[600px] bg-emerald-600/12 rounded-full blur-[140px] animate-float-2 pointer-events-none"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[130px] animate-float-3 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-ambient-grid opacity-50 pointer-events-none"></div>
 
     <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center space-y-3">
       <!-- Dynamic Login Logo / Icon -->
