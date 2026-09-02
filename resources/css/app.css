@@ -130,25 +130,63 @@ body {
 .heat-2 { background-color: rgba(99, 102, 241, 0.3); color: #c7d2fe; border: 1px solid rgba(99, 102, 241, 0.4); }
 .heat-3 { background-color: rgba(16, 185, 129, 0.35); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); font-weight: 600; }
 
-/* Print Styles for NBA SAR Compilation */
+/* Print Styles for NBA SAR Compilation (A4 Standard Format) */
 @media print {
-    body {
-        background-color: #ffffff !important;
-        color: #000000 !important;
+    @page {
+        size: A4 portrait;
+        margin: 12mm 12mm 12mm 12mm;
     }
-    .no-print {
+    html, body {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 10pt !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    aside, header, nav, footer, .no-print, 
+    .animate-float-1, .animate-float-2, .animate-float-3, 
+    .bg-ambient-grid, [role="navigation"] {
         display: none !important;
+        visibility: hidden !important;
+    }
+    main, .main-container, .max-w-7xl {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        overflow: visible !important;
+    }
+    .min-h-screen {
+        min-height: auto !important;
     }
     .print-only {
         display: block !important;
     }
     .glass-card {
         background: transparent !important;
-        border: 1px solid #cbd5e1 !important;
+        border: none !important;
         color: #000000 !important;
         box-shadow: none !important;
+        padding: 0 !important;
+    }
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        page-break-inside: auto;
+    }
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    th, td {
+        color: #000000 !important;
     }
     .page-break {
-        page-break-before: always;
+        page-break-before: always !important;
     }
 }

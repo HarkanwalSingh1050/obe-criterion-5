@@ -17,7 +17,7 @@
         <div class="absolute inset-0 bg-ambient-grid opacity-60"></div>
       </div>
       <!-- Collapsible Sidebar -->
-      <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 z-40">
+      <aside class="no-print w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 z-40">
         <!-- Sidebar Brand Header -->
         <div class="h-16 px-4 flex items-center space-x-3 border-b border-slate-800 bg-slate-900/50">
           <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm overflow-hidden shrink-0">
@@ -185,9 +185,9 @@
       </aside>
 
       <!-- Main App Content Area -->
-      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden print:overflow-visible">
         <!-- Top Navigation Header -->
-        <header class="h-16 bg-slate-900 border-b border-slate-800 px-6 flex items-center justify-between sticky top-0 z-30">
+        <header class="no-print h-16 bg-slate-900 border-b border-slate-800 px-6 flex items-center justify-between sticky top-0 z-30">
           <div class="flex items-center space-x-4">
             <div class="text-xs text-slate-400">
               Active Module: <strong class="text-slate-200 capitalize font-semibold">{{ currentViewTitle }}</strong>
