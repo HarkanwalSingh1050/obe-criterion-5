@@ -5,17 +5,21 @@
     <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center space-y-3">
-      <!-- Logo -->
-      <div class="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-500 to-emerald-400 p-[2px] shadow-xl shadow-indigo-500/25">
-        <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center font-black text-indigo-400 text-2xl">
-          NBA
+      <!-- Dynamic Login Logo / Icon -->
+      <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-500 to-emerald-400 p-[2px] shadow-xl shadow-indigo-500/25">
+        <div class="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center p-1.5 overflow-hidden">
+          <img v-if="branding.login_logo" :src="branding.login_logo" class="w-full h-full object-contain rounded-lg" alt="Portal Logo" />
+          <div v-else class="font-black text-indigo-400 text-2xl">
+            {{ branding.app_short_name || 'NBA' }}
+          </div>
         </div>
       </div>
+
       <h2 class="text-3xl font-extrabold tracking-tight text-white">
-        SAR Platform • Portal
+        {{ branding.app_name || 'NBA SAR Platform' }}
       </h2>
       <p class="text-xs text-slate-400 max-w-xs mx-auto">
-        Outcome-Based Education & National Board of Accreditation Enterprise Platform
+        {{ branding.app_tagline || 'Outcome-Based Education & National Board of Accreditation Enterprise Platform' }}
       </p>
     </div>
 
@@ -31,19 +35,16 @@
           <div>
             <label class="block text-xs font-semibold text-slate-300">Email Address</label>
             <div class="mt-1">
-              <input type="email" v-model="form.email" required placeholder="admin@nba-obe.edu"
-                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition" />
+              <input type="email" v-model="form.email" required placeholder="name@institution.edu"
+                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition" />
             </div>
           </div>
 
           <div>
-            <div class="flex items-center justify-between">
-              <label class="block text-xs font-semibold text-slate-300">Password</label>
-              <span class="text-[11px] text-indigo-400 hover:text-indigo-300 cursor-pointer">Default: Admin@123</span>
-            </div>
+            <label class="block text-xs font-semibold text-slate-300">Password</label>
             <div class="mt-1">
-              <input type="password" v-model="form.password" required placeholder="••••••••"
-                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition" />
+              <input type="password" v-model="form.password" required placeholder="Enter your password"
+                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition" />
             </div>
           </div>
 
@@ -52,10 +53,10 @@
               <input type="checkbox" v-model="form.remember" class="rounded bg-slate-950 border-slate-800 text-indigo-600 focus:ring-0 mr-2" />
               Remember me
             </label>
-            <span class="text-slate-500">Secure Session</span>
+            <span class="text-slate-500">Encrypted Session</span>
           </div>
 
-          <div>
+          <div class="pt-2">
             <button type="submit" :disabled="loading"
                     class="w-full py-2.5 px-4 rounded-xl text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-sm font-bold shadow-lg shadow-indigo-600/30 transition disabled:opacity-50 flex items-center justify-center gap-2">
               <span v-if="loading" class="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
@@ -63,53 +64,6 @@
             </button>
           </div>
         </form>
-
-        <!-- Quick Demo Role Logins -->
-        <div class="mt-6 pt-6 border-t border-slate-800">
-          <div class="text-center">
-            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              One-Click Demo Role Logins
-            </span>
-          </div>
-
-          <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
-            <button @click="fillCredentials('admin@nba-obe.edu', 'Admin@123')"
-                    class="p-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-indigo-500/50 text-left transition flex items-center gap-2">
-              <span>👑</span>
-              <div>
-                <div class="font-bold text-white text-[11px]">Super Admin</div>
-                <div class="text-[10px] text-slate-500 truncate">Full System Access</div>
-              </div>
-            </button>
-
-            <button @click="fillCredentials('hod.cse@niet-tech.edu.in', 'Password@123')"
-                    class="p-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-indigo-500/50 text-left transition flex items-center gap-2">
-              <span>🏛️</span>
-              <div>
-                <div class="font-bold text-white text-[11px]">HOD (CSE)</div>
-                <div class="text-[10px] text-slate-500 truncate">Dept Consolidation</div>
-              </div>
-            </button>
-
-            <button @click="fillCredentials('faculty@niet-tech.edu.in', 'Password@123')"
-                    class="p-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-indigo-500/50 text-left transition flex items-center gap-2">
-              <span>🎓</span>
-              <div>
-                <div class="font-bold text-white text-[11px]">Faculty</div>
-                <div class="text-[10px] text-slate-500 truncate">Marks & CO Entry</div>
-              </div>
-            </button>
-
-            <button @click="fillCredentials('iqac@niet-tech.edu.in', 'Password@123')"
-                    class="p-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-indigo-500/50 text-left transition flex items-center gap-2">
-              <span>🔍</span>
-              <div>
-                <div class="font-bold text-white text-[11px]">IQAC / Principal</div>
-                <div class="text-[10px] text-slate-500 truncate">Institutional Review</div>
-              </div>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -124,18 +78,36 @@ export default {
     return {
       loading: false,
       errorMessage: '',
+      branding: {
+        app_name: 'NBA SAR & OBE Platform',
+        app_short_name: 'NBA',
+        app_tagline: 'Outcome-Based Education & National Board of Accreditation Enterprise Platform',
+        login_logo: '',
+      },
       form: {
-        email: 'admin@nba-obe.edu',
-        password: 'Admin@123',
+        email: '',
+        password: '',
         remember: true,
       },
     };
   },
+  mounted() {
+    this.fetchBranding();
+  },
   methods: {
-    fillCredentials(email, password) {
-      this.form.email = email;
-      this.form.password = password;
-      this.handleLogin();
+    async fetchBranding() {
+      try {
+        const res = await axios.get('/api/v1/settings');
+        if (res.data && res.data.success) {
+          this.branding = { ...this.branding, ...res.data.data };
+          if (this.branding.favicon) {
+            let link = document.querySelector("link[rel~='icon']");
+            if (link) link.href = this.branding.favicon;
+          }
+        }
+      } catch (err) {
+        // Fallback to default
+      }
     },
     async handleLogin() {
       this.loading = true;

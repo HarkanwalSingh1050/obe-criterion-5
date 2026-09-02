@@ -33,100 +33,117 @@ class NbaSarDatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Institution & Department
-        $inst = Institution::create([
-            'name' => 'National Institute of Engineering & Technology',
-            'code' => 'NIET-098',
-            'head_of_institution' => 'Dr. R. K. Sharma (Principal / Director)',
-            'address' => 'Knowledge Park Tech Zone, Phase II',
-            'website' => 'https://niet-tech.edu.in',
-        ]);
+        $inst = Institution::firstOrCreate(
+            ['code' => 'NIET-098'],
+            [
+                'name' => 'National Institute of Engineering & Technology',
+                'head_of_institution' => 'Dr. R. K. Sharma (Principal / Director)',
+                'address' => 'Knowledge Park Tech Zone, Phase II',
+                'website' => 'https://niet-tech.edu.in',
+            ]
+        );
 
-        $dept = Department::create([
-            'institution_id' => $inst->id,
-            'name' => 'Department of Computer Science and Engineering',
-            'code' => 'CSE',
-            'hod_name' => 'Dr. Arvind Mehra, Ph.D.',
-            'hod_email' => 'hod.cse@niet-tech.edu.in',
-        ]);
+        $dept = Department::firstOrCreate(
+            ['code' => 'CSE', 'institution_id' => $inst->id],
+            [
+                'name' => 'Department of Computer Science and Engineering',
+                'hod_name' => 'Dr. Arvind Mehra, Ph.D.',
+                'hod_email' => 'hod.cse@niet-tech.edu.in',
+            ]
+        );
 
         // Default System Users for Roles
-        \App\Models\User::create([
-            'name' => 'System Super Admin',
-            'email' => 'admin@nba-obe.edu',
-            'password' => \Illuminate\Support\Facades\Hash::make('Admin@123'),
-            'role' => \App\Models\User::ROLE_SUPER_ADMIN,
-            'designation' => 'Chief Technology Officer & Admin',
-            'phone' => '+91 9900112233',
-            'is_active' => true,
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['email' => 'admin@nba-obe.edu'],
+            [
+                'name' => 'System Super Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('Admin@123'),
+                'role' => \App\Models\User::ROLE_SUPER_ADMIN,
+                'designation' => 'Chief Technology Officer & Admin',
+                'phone' => '+91 9900112233',
+                'is_active' => true,
+            ]
+        );
 
-        \App\Models\User::create([
-            'name' => 'Dr. Arvind Mehra',
-            'email' => 'hod.cse@niet-tech.edu.in',
-            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
-            'role' => \App\Models\User::ROLE_HOD,
-            'department_id' => $dept->id,
-            'designation' => 'Professor & Head of Department',
-            'faculty_code' => 'FAC-CSE-001',
-            'phone' => '+91 9811223344',
-            'is_active' => true,
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['email' => 'hod.cse@niet-tech.edu.in'],
+            [
+                'name' => 'Dr. Arvind Mehra',
+                'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+                'role' => \App\Models\User::ROLE_HOD,
+                'department_id' => $dept->id,
+                'designation' => 'Professor & Head of Department',
+                'faculty_code' => 'FAC-CSE-001',
+                'phone' => '+91 9811223344',
+                'is_active' => true,
+            ]
+        );
 
-        \App\Models\User::create([
-            'name' => 'Prof. Rohit Kulkarni',
-            'email' => 'faculty@niet-tech.edu.in',
-            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
-            'role' => \App\Models\User::ROLE_FACULTY,
-            'department_id' => $dept->id,
-            'designation' => 'Associate Professor & Course Coordinator',
-            'faculty_code' => 'FAC-CSE-008',
-            'phone' => '+91 9822334455',
-            'is_active' => true,
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['email' => 'faculty@niet-tech.edu.in'],
+            [
+                'name' => 'Prof. Rohit Kulkarni',
+                'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+                'role' => \App\Models\User::ROLE_FACULTY,
+                'department_id' => $dept->id,
+                'designation' => 'Associate Professor & Course Coordinator',
+                'faculty_code' => 'FAC-CSE-008',
+                'phone' => '+91 9822334455',
+                'is_active' => true,
+            ]
+        );
 
-        \App\Models\User::create([
-            'name' => 'Dr. R. K. Sharma',
-            'email' => 'iqac@niet-tech.edu.in',
-            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
-            'role' => \App\Models\User::ROLE_IQAC,
-            'designation' => 'Principal & IQAC Chairman',
-            'phone' => '+91 9833445566',
-            'is_active' => true,
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['email' => 'iqac@niet-tech.edu.in'],
+            [
+                'name' => 'Dr. R. K. Sharma',
+                'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+                'role' => \App\Models\User::ROLE_IQAC,
+                'designation' => 'Principal & IQAC Chairman',
+                'phone' => '+91 9833445566',
+                'is_active' => true,
+            ]
+        );
 
-        \App\Models\User::create([
-            'name' => 'Prof. NBA Expert Committee',
-            'email' => 'evaluator@nba-obe.edu',
-            'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
-            'role' => \App\Models\User::ROLE_EVALUATOR,
-            'designation' => 'External Accreditation Peer Reviewer',
-            'phone' => '+91 9844556677',
-            'is_active' => true,
-        ]);
+        \App\Models\User::firstOrCreate(
+            ['email' => 'evaluator@nba-obe.edu'],
+            [
+                'name' => 'Prof. NBA Expert Committee',
+                'password' => \Illuminate\Support\Facades\Hash::make('Password@123'),
+                'role' => \App\Models\User::ROLE_EVALUATOR,
+                'designation' => 'External Accreditation Peer Reviewer',
+                'phone' => '+91 9844556677',
+                'is_active' => true,
+            ]
+        );
 
         // 2. Academic Years (CAY, CAYm1, CAYm2, CAYm3)
-        $cay = AcademicYear::create(['name' => '2024-25', 'type' => 'CAY', 'start_year' => 2024, 'end_year' => 2025, 'is_current' => true]);
-        $caym1 = AcademicYear::create(['name' => '2023-24', 'type' => 'CAYm1', 'start_year' => 2023, 'end_year' => 2024, 'is_current' => false]);
-        $caym2 = AcademicYear::create(['name' => '2022-23', 'type' => 'CAYm2', 'start_year' => 2022, 'end_year' => 2023, 'is_current' => false]);
-        $caym3 = AcademicYear::create(['name' => '2021-22', 'type' => 'CAYm3', 'start_year' => 2021, 'end_year' => 2022, 'is_current' => false]);
+        $cay = AcademicYear::firstOrCreate(['name' => '2024-25'], ['type' => 'CAY', 'start_year' => 2024, 'end_year' => 2025, 'is_current' => true]);
+        $caym1 = AcademicYear::firstOrCreate(['name' => '2023-24'], ['type' => 'CAYm1', 'start_year' => 2023, 'end_year' => 2024, 'is_current' => false]);
+        $caym2 = AcademicYear::firstOrCreate(['name' => '2022-23'], ['type' => 'CAYm2', 'start_year' => 2022, 'end_year' => 2023, 'is_current' => false]);
+        $caym3 = AcademicYear::firstOrCreate(['name' => '2021-22'], ['type' => 'CAYm3', 'start_year' => 2021, 'end_year' => 2022, 'is_current' => false]);
 
         // 3. Program
-        $prog = Program::create([
-            'institution_id' => $inst->id,
-            'department_id' => $dept->id,
-            'name' => 'B.Tech in Computer Science and Engineering',
-            'code' => 'BTECH-CSE',
-            'degree_level' => 'UG',
-            'sanctioned_intake' => 120,
-            'year_of_start' => 2008,
-            'nba_tier' => 'Tier-II',
-            'coordinator_name' => 'Dr. S. Narayan (NBA Coordinator)',
-        ]);
+        $prog = Program::firstOrCreate(
+            ['code' => 'BTECH-CSE'],
+            [
+                'institution_id' => $inst->id,
+                'department_id' => $dept->id,
+                'name' => 'B.Tech in Computer Science and Engineering',
+                'degree_level' => 'UG',
+                'sanctioned_intake' => 120,
+                'year_of_start' => 2008,
+                'nba_tier' => 'Tier-II',
+                'coordinator_name' => 'Dr. S. Narayan (NBA Coordinator)',
+            ]
+        );
 
         // 4. Academic Intake data (UGT1 + UGT2 + UGT3 + UGT4)
-        AcademicIntake::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'ug_1st_year' => 120, 'ug_2nd_year' => 128, 'ug_3rd_year' => 125, 'ug_4th_year' => 122, 'lateral_entry' => 12]);
-        AcademicIntake::create(['program_id' => $prog->id, 'academic_year_id' => $caym1->id, 'ug_1st_year' => 120, 'ug_2nd_year' => 126, 'ug_3rd_year' => 124, 'ug_4th_year' => 120, 'lateral_entry' => 12]);
-        AcademicIntake::create(['program_id' => $prog->id, 'academic_year_id' => $caym2->id, 'ug_1st_year' => 120, 'ug_2nd_year' => 124, 'ug_3rd_year' => 120, 'ug_4th_year' => 118, 'lateral_entry' => 10]);
+        if (AcademicIntake::where('program_id', $prog->id)->count() === 0) {
+            AcademicIntake::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'ug_1st_year' => 120, 'ug_2nd_year' => 128, 'ug_3rd_year' => 125, 'ug_4th_year' => 122, 'lateral_entry' => 12]);
+            AcademicIntake::create(['program_id' => $prog->id, 'academic_year_id' => $caym1->id, 'ug_1st_year' => 120, 'ug_2nd_year' => 126, 'ug_3rd_year' => 124, 'ug_4th_year' => 120, 'lateral_entry' => 12]);
+            AcademicIntake::create(['program_id' => $prog->id, 'academic_year_id' => $caym2->id, 'ug_1st_year' => 120, 'ug_2nd_year' => 124, 'ug_3rd_year' => 120, 'ug_4th_year' => 118, 'lateral_entry' => 10]);
+        }
 
         // 5. Faculty Profiles (Professors, Assoc Profs, Asst Profs)
         $facultyData = [
@@ -154,51 +171,54 @@ class NbaSarDatabaseSeeder extends Seeder
             ['name' => 'Prof. Ananya Mukherjee', 'faculty_id' => 'FAC-CSE-022', 'degree' => 'M.Tech Human Computer Interaction', 'cadre' => 'Assistant Professor', 'exp' => 1, 'joining' => '2024-07-01'],
         ];
 
-        $createdProfiles = [];
         foreach ($facultyData as $f) {
-            $prof = FacultyProfile::create([
-                'department_id' => $dept->id,
-                'faculty_id' => $f['faculty_id'],
-                'name' => $f['name'],
-                'pan' => 'ABCDE' . rand(1000, 9999) . 'Z',
-                'apaar_id' => 'APAAR-' . rand(10000000, 99999999),
-                'email' => strtolower(str_replace(['Dr. ', 'Prof. ', ' '], ['', '', '.'], $f['name'])) . '@niet-tech.edu.in',
-                'mobile' => '+91 98' . rand(10000000, 99999999),
-                'joining_date' => $f['joining'],
-                'highest_degree' => $f['degree'],
-                'degree_specialization' => $f['degree'],
-                'teaching_experience_years' => $f['exp'],
-                'is_active' => true,
-            ]);
-            $createdProfiles[] = ['profile' => $prof, 'cadre' => $f['cadre']];
+            $prof = FacultyProfile::firstOrCreate(
+                ['faculty_id' => $f['faculty_id']],
+                [
+                    'department_id' => $dept->id,
+                    'name' => $f['name'],
+                    'pan' => 'ABCDE' . rand(1000, 9999) . 'Z',
+                    'apaar_id' => 'APAAR-' . rand(10000000, 99999999),
+                    'email' => strtolower(str_replace(['Dr. ', 'Prof. ', ' '], ['', '', '.'], $f['name'])) . '@niet-tech.edu.in',
+                    'mobile' => '+91 98' . rand(10000000, 99999999),
+                    'joining_date' => $f['joining'],
+                    'highest_degree' => $f['degree'],
+                    'degree_specialization' => $f['degree'],
+                    'teaching_experience_years' => $f['exp'],
+                    'is_active' => true,
+                ]
+            );
 
             // Assign to CAY, CAYm1, CAYm2
             foreach ([$cay, $caym1, $caym2] as $y) {
-                FacultyAcademicYear::create([
-                    'faculty_profile_id' => $prof->id,
-                    'academic_year_id' => $y->id,
-                    'program_id' => $prog->id,
-                    'designation' => $f['cadre'],
-                    'cadre' => $f['cadre'],
-                    'pay_scale' => str_contains($f['cadre'], 'Professor') ? '7th CPC Level 14' : (str_contains($f['cadre'], 'Associate') ? '7th CPC Level 13A' : '7th CPC Level 10'),
-                    'association_type' => 'Regular',
-                    'is_exclusive_to_program' => true,
-                ]);
+                FacultyAcademicYear::firstOrCreate(
+                    ['faculty_profile_id' => $prof->id, 'academic_year_id' => $y->id],
+                    [
+                        'program_id' => $prog->id,
+                        'designation' => $f['cadre'],
+                        'cadre' => $f['cadre'],
+                        'pay_scale' => str_contains($f['cadre'], 'Professor') ? '7th CPC Level 14' : (str_contains($f['cadre'], 'Associate') ? '7th CPC Level 13A' : '7th CPC Level 10'),
+                        'association_type' => 'Regular',
+                        'is_exclusive_to_program' => true,
+                    ]
+                );
             }
 
             // Faculty FDP
-            FacultyFdp::create([
-                'faculty_profile_id' => $prof->id,
-                'academic_year_id' => $cay->id,
-                'title' => 'Advanced Pedagogical Training & Outcome Based Education Implementation',
-                'duration_days' => 5,
-                'organizer' => 'AICTE - ATAL Academy',
-                'start_date' => '2024-09-10',
-                'end_date' => '2024-09-15',
-            ]);
+            if (FacultyFdp::where('faculty_profile_id', $prof->id)->count() === 0) {
+                FacultyFdp::create([
+                    'faculty_profile_id' => $prof->id,
+                    'academic_year_id' => $cay->id,
+                    'title' => 'Advanced Pedagogical Training & Outcome Based Education Implementation',
+                    'duration_days' => 5,
+                    'organizer' => 'AICTE - ATAL Academy',
+                    'start_date' => '2024-09-10',
+                    'end_date' => '2024-09-15',
+                ]);
+            }
 
             // Publication
-            if (str_contains($f['degree'], 'Ph.D')) {
+            if (str_contains($f['degree'], 'Ph.D') && FacultyPublication::where('faculty_profile_id', $prof->id)->count() === 0) {
                 FacultyPublication::create([
                     'faculty_profile_id' => $prof->id,
                     'academic_year_id' => $cay->id,
@@ -230,12 +250,10 @@ class NbaSarDatabaseSeeder extends Seeder
 
         $createdPos = [];
         foreach ($nbaPos as $p) {
-            $createdPos[$p['code']] = ProgramOutcome::create([
-                'program_id' => $prog->id,
-                'po_code' => $p['code'],
-                'title' => $p['title'],
-                'description' => $p['desc'],
-            ]);
+            $createdPos[$p['code']] = ProgramOutcome::firstOrCreate(
+                ['program_id' => $prog->id, 'po_code' => $p['code']],
+                ['title' => $p['title'], 'description' => $p['desc']]
+            );
         }
 
         // Program Specific Outcomes (PSOs)
@@ -246,176 +264,190 @@ class NbaSarDatabaseSeeder extends Seeder
 
         $createdPsos = [];
         foreach ($nbaPsos as $p) {
-            $createdPsos[$p['code']] = ProgramSpecificOutcome::create([
-                'program_id' => $prog->id,
-                'pso_code' => $p['code'],
-                'title' => $p['title'],
-                'description' => $p['desc'],
-            ]);
+            $createdPsos[$p['code']] = ProgramSpecificOutcome::firstOrCreate(
+                ['program_id' => $prog->id, 'pso_code' => $p['code']],
+                ['title' => $p['title'], 'description' => $p['desc']]
+            );
         }
 
-        // 7. Courses & Articulation Matrix
-        $coursesData = [
-            ['code' => 'CS301', 'name' => 'Data Structures and Algorithms', 'sem' => 3, 'credits' => 4.0],
-            ['code' => 'CS401', 'name' => 'Database Management Systems', 'sem' => 4, 'credits' => 4.0],
-            ['code' => 'CS501', 'name' => 'Operating Systems & Concurrency', 'sem' => 5, 'credits' => 3.5],
-            ['code' => 'CS502', 'name' => 'Computer Networks & Protocols', 'sem' => 5, 'credits' => 3.5],
-            ['code' => 'CS601', 'name' => 'Artificial Intelligence & Machine Learning', 'sem' => 6, 'credits' => 4.0],
-            ['code' => 'CS602', 'name' => 'Software Engineering & Agile Methodologies', 'sem' => 6, 'credits' => 3.0],
-            ['code' => 'CS701', 'name' => 'Cloud Computing & Distributed Systems', 'sem' => 7, 'credits' => 3.5],
-            ['code' => 'CS801', 'name' => 'Cybersecurity & Cryptographic Protocols', 'sem' => 8, 'credits' => 3.0],
-        ];
+        // 7. Courses & Articulation Matrix (Only seed if courses count is 0)
+        if (Course::where('program_id', $prog->id)->count() === 0) {
+            $coursesData = [
+                ['code' => 'CS301', 'name' => 'Data Structures and Algorithms', 'sem' => 3, 'credits' => 4.0],
+                ['code' => 'CS401', 'name' => 'Database Management Systems', 'sem' => 4, 'credits' => 4.0],
+                ['code' => 'CS501', 'name' => 'Operating Systems & Concurrency', 'sem' => 5, 'credits' => 3.5],
+                ['code' => 'CS502', 'name' => 'Computer Networks & Protocols', 'sem' => 5, 'credits' => 3.5],
+                ['code' => 'CS601', 'name' => 'Artificial Intelligence & Machine Learning', 'sem' => 6, 'credits' => 4.0],
+                ['code' => 'CS602', 'name' => 'Software Engineering & Agile Methodologies', 'sem' => 6, 'credits' => 3.0],
+                ['code' => 'CS701', 'name' => 'Cloud Computing & Distributed Systems', 'sem' => 7, 'credits' => 3.5],
+                ['code' => 'CS801', 'name' => 'Cybersecurity & Cryptographic Protocols', 'sem' => 8, 'credits' => 3.0],
+            ];
 
-        foreach ($coursesData as $c) {
-            $course = Course::create([
-                'program_id' => $prog->id,
-                'academic_year_id' => $cay->id,
-                'course_code' => $c['code'],
-                'course_name' => $c['name'],
-                'semester' => $c['sem'],
-                'credits' => $c['credits'],
-                'lecture_hours' => 3,
-                'tutorial_hours' => 0,
-                'practical_hours' => 2,
-                'course_type' => 'Core',
-            ]);
-
-            // Create 5 Course Outcomes per course
-            for ($i = 1; $i <= 5; $i++) {
-                $co = CourseOutcome::create([
-                    'course_id' => $course->id,
-                    'co_code' => "CO{$i}",
-                    'description' => "Demonstrate proficiency in {$c['name']} objective {$i} with algorithmic design and practical implementation.",
-                    'target_percentage' => 65.0,
-                    'target_level' => 2.5,
-                    'bloom_level' => $i <= 2 ? 'Understand' : ($i <= 4 ? 'Apply' : 'Analyze'),
+            foreach ($coursesData as $c) {
+                $course = Course::create([
+                    'program_id' => $prog->id,
+                    'academic_year_id' => $cay->id,
+                    'course_code' => $c['code'],
+                    'course_name' => $c['name'],
+                    'semester' => $c['sem'],
+                    'credits' => $c['credits'],
+                    'lecture_hours' => 3,
+                    'tutorial_hours' => 0,
+                    'practical_hours' => 2,
+                    'course_type' => 'Core',
                 ]);
 
-                // Map CO to POs (Correlation levels 1, 2, 3)
-                $mapPos = ['PO1' => 3, 'PO2' => 3, 'PO3' => 2, 'PO5' => 3, 'PO9' => 2, 'PO12' => 2];
-                foreach ($mapPos as $poKey => $lvl) {
-                    if (isset($createdPos[$poKey])) {
+                // Create 5 Course Outcomes per course
+                for ($i = 1; $i <= 5; $i++) {
+                    $co = CourseOutcome::create([
+                        'course_id' => $course->id,
+                        'co_code' => "CO{$i}",
+                        'description' => "Demonstrate proficiency in {$c['name']} objective {$i} with algorithmic design and practical implementation.",
+                        'target_percentage' => 65.0,
+                        'target_level' => 2.5,
+                        'bloom_level' => $i <= 2 ? 'Understand' : ($i <= 4 ? 'Apply' : 'Analyze'),
+                    ]);
+
+                    // Map CO to POs (Correlation levels 1, 2, 3)
+                    $mapPos = ['PO1' => 3, 'PO2' => 3, 'PO3' => 2, 'PO5' => 3, 'PO9' => 2, 'PO12' => 2];
+                    foreach ($mapPos as $poKey => $lvl) {
+                        if (isset($createdPos[$poKey])) {
+                            CoPoMapping::create([
+                                'course_outcome_id' => $co->id,
+                                'target_type' => 'PO',
+                                'target_id' => $createdPos[$poKey]->id,
+                                'correlation_level' => max(1, ($lvl + ($i % 2) - 1)),
+                                'justification' => "Course outcome directly enhances competence in {$poKey}.",
+                            ]);
+                        }
+                    }
+
+                    // Map CO to PSOs
+                    foreach ($createdPsos as $psoKey => $psoModel) {
                         CoPoMapping::create([
                             'course_outcome_id' => $co->id,
-                            'target_type' => 'PO',
-                            'target_id' => $createdPos[$poKey]->id,
-                            'correlation_level' => max(1, ($lvl + ($i % 2) - 1)),
-                            'justification' => "Course outcome directly enhances competence in {$poKey}.",
+                            'target_type' => 'PSO',
+                            'target_id' => $psoModel->id,
+                            'correlation_level' => 2,
+                            'justification' => "Maps to {$psoKey} industry competencies.",
                         ]);
                     }
-                }
 
-                // Map CO to PSOs
-                foreach ($createdPsos as $psoKey => $psoModel) {
-                    CoPoMapping::create([
+                    // Create Student Assessments for CIE and SEE
+                    StudentAssessment::create([
+                        'course_id' => $course->id,
                         'course_outcome_id' => $co->id,
-                        'target_type' => 'PSO',
-                        'target_id' => $psoModel->id,
-                        'correlation_level' => 2,
-                        'justification' => "Maps to {$psoKey} industry competencies.",
+                        'academic_year_id' => $cay->id,
+                        'assessment_type' => 'Internal_Test_1',
+                        'total_students_attempted' => 125,
+                        'students_meeting_target' => 98,
+                        'percentage_achieved' => 78.4,
+                        'attainment_level' => 2.8,
+                    ]);
+
+                    StudentAssessment::create([
+                        'course_id' => $course->id,
+                        'course_outcome_id' => $co->id,
+                        'academic_year_id' => $cay->id,
+                        'assessment_type' => 'End_Sem',
+                        'total_students_attempted' => 125,
+                        'students_meeting_target' => 92,
+                        'percentage_achieved' => 73.6,
+                        'attainment_level' => 2.6,
+                    ]);
+
+                    // Attainment Result
+                    AttainmentResult::create([
+                        'course_outcome_id' => $co->id,
+                        'academic_year_id' => $cay->id,
+                        'direct_cie_score' => 2.8,
+                        'direct_see_score' => 2.6,
+                        'direct_attainment' => 2.64,
+                        'indirect_attainment' => 2.55,
+                        'final_score' => 2.62,
                     ]);
                 }
-
-                // Create Student Assessments for CIE and SEE
-                StudentAssessment::create([
-                    'course_id' => $course->id,
-                    'course_outcome_id' => $co->id,
-                    'academic_year_id' => $cay->id,
-                    'assessment_type' => 'Internal_Test_1',
-                    'total_students_attempted' => 125,
-                    'students_meeting_target' => 98,
-                    'percentage_achieved' => 78.4,
-                    'attainment_level' => 2.8,
-                ]);
-
-                StudentAssessment::create([
-                    'course_id' => $course->id,
-                    'course_outcome_id' => $co->id,
-                    'academic_year_id' => $cay->id,
-                    'assessment_type' => 'End_Sem',
-                    'total_students_attempted' => 125,
-                    'students_meeting_target' => 92,
-                    'percentage_achieved' => 73.6,
-                    'attainment_level' => 2.6,
-                ]);
-
-                // Attainment Result
-                AttainmentResult::create([
-                    'course_outcome_id' => $co->id,
-                    'academic_year_id' => $cay->id,
-                    'direct_cie_score' => 2.8,
-                    'direct_see_score' => 2.6,
-                    'direct_attainment' => 2.64,
-                    'indirect_attainment' => 2.55,
-                    'final_score' => 2.62,
-                ]);
             }
         }
 
         // 8. Indirect Assessments (Surveys)
-        foreach ($createdPos as $poCode => $poModel) {
-            IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Graduate_Exit_Survey', 'target_type' => 'PO', 'target_id' => $poModel->id, 'average_rating' => 2.65, 'total_respondents' => 110]);
-            IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Alumni_Survey', 'target_type' => 'PO', 'target_id' => $poModel->id, 'average_rating' => 2.50, 'total_respondents' => 75]);
-            IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Employer_Survey', 'target_type' => 'PO', 'target_id' => $poModel->id, 'average_rating' => 2.70, 'total_respondents' => 30]);
-        }
+        if (IndirectAssessment::where('program_id', $prog->id)->count() === 0) {
+            foreach ($createdPos as $poCode => $poModel) {
+                IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Graduate_Exit_Survey', 'target_type' => 'PO', 'target_id' => $poModel->id, 'average_rating' => 2.65, 'total_respondents' => 110]);
+                IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Alumni_Survey', 'target_type' => 'PO', 'target_id' => $poModel->id, 'average_rating' => 2.50, 'total_respondents' => 75]);
+                IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Employer_Survey', 'target_type' => 'PO', 'target_id' => $poModel->id, 'average_rating' => 2.70, 'total_respondents' => 30]);
+            }
 
-        foreach ($createdPsos as $psoCode => $psoModel) {
-            IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Graduate_Exit_Survey', 'target_type' => 'PSO', 'target_id' => $psoModel->id, 'average_rating' => 2.70, 'total_respondents' => 110]);
-            IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Alumni_Survey', 'target_type' => 'PSO', 'target_id' => $psoModel->id, 'average_rating' => 2.55, 'total_respondents' => 75]);
-            IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Employer_Survey', 'target_type' => 'PSO', 'target_id' => $psoModel->id, 'average_rating' => 2.75, 'total_respondents' => 30]);
+            foreach ($createdPsos as $psoCode => $psoModel) {
+                IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Graduate_Exit_Survey', 'target_type' => 'PSO', 'target_id' => $psoModel->id, 'average_rating' => 2.70, 'total_respondents' => 110]);
+                IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Alumni_Survey', 'target_type' => 'PSO', 'target_id' => $psoModel->id, 'average_rating' => 2.55, 'total_respondents' => 75]);
+                IndirectAssessment::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'survey_type' => 'Employer_Survey', 'target_type' => 'PSO', 'target_id' => $psoModel->id, 'average_rating' => 2.75, 'total_respondents' => 30]);
+            }
         }
 
         // 9. Student Cohorts (Criterion 4)
-        StudentCohort::create(['program_id' => $prog->id, 'batch_name' => '2020-2024 (CAYm1)', 'entry_year' => 2020, 'graduation_year' => 2024, 'cohort_type' => 'CAYm1', 'sanctioned_intake' => 120, 'admitted_first_year' => 120, 'lateral_admitted_second_year' => 12, 'graduated_without_backlog' => 102, 'graduated_in_stipulated_time' => 122]);
-        StudentCohort::create(['program_id' => $prog->id, 'batch_name' => '2019-2023 (CAYm2)', 'entry_year' => 2019, 'graduation_year' => 2023, 'cohort_type' => 'CAYm2', 'sanctioned_intake' => 120, 'admitted_first_year' => 118, 'lateral_admitted_second_year' => 10, 'graduated_without_backlog' => 96, 'graduated_in_stipulated_time' => 116]);
-        StudentCohort::create(['program_id' => $prog->id, 'batch_name' => '2018-2022 (CAYm3)', 'entry_year' => 2018, 'graduation_year' => 2022, 'cohort_type' => 'CAYm3', 'sanctioned_intake' => 120, 'admitted_first_year' => 120, 'lateral_admitted_second_year' => 12, 'graduated_without_backlog' => 94, 'graduated_in_stipulated_time' => 114]);
+        if (StudentCohort::where('program_id', $prog->id)->count() === 0) {
+            StudentCohort::create(['program_id' => $prog->id, 'batch_name' => '2020-2024 (CAYm1)', 'entry_year' => 2020, 'graduation_year' => 2024, 'cohort_type' => 'CAYm1', 'sanctioned_intake' => 120, 'admitted_first_year' => 120, 'lateral_admitted_second_year' => 12, 'graduated_without_backlog' => 102, 'graduated_in_stipulated_time' => 122]);
+            StudentCohort::create(['program_id' => $prog->id, 'batch_name' => '2019-2023 (CAYm2)', 'entry_year' => 2019, 'graduation_year' => 2023, 'cohort_type' => 'CAYm2', 'sanctioned_intake' => 120, 'admitted_first_year' => 118, 'lateral_admitted_second_year' => 10, 'graduated_without_backlog' => 96, 'graduated_in_stipulated_time' => 116]);
+            StudentCohort::create(['program_id' => $prog->id, 'batch_name' => '2018-2022 (CAYm3)', 'entry_year' => 2018, 'graduation_year' => 2022, 'cohort_type' => 'CAYm3', 'sanctioned_intake' => 120, 'admitted_first_year' => 120, 'lateral_admitted_second_year' => 12, 'graduated_without_backlog' => 94, 'graduated_in_stipulated_time' => 114]);
+        }
 
         // Placements (Criterion 4.5)
-        StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'final_year_students' => 122, 'placed_students' => 96, 'higher_studies_students' => 14, 'entrepreneurs_count' => 3, 'median_salary_lpa' => 7.8]);
-        StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $caym1->id, 'final_year_students' => 120, 'placed_students' => 92, 'higher_studies_students' => 12, 'entrepreneurs_count' => 2, 'median_salary_lpa' => 7.2]);
-        StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $caym2->id, 'final_year_students' => 118, 'placed_students' => 88, 'higher_studies_students' => 15, 'entrepreneurs_count' => 2, 'median_salary_lpa' => 6.5]);
+        if (StudentPlacement::where('program_id', $prog->id)->count() === 0) {
+            StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $cay->id, 'final_year_students' => 122, 'placed_students' => 96, 'higher_studies_students' => 14, 'entrepreneurs_count' => 3, 'median_salary_lpa' => 7.8]);
+            StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $caym1->id, 'final_year_students' => 120, 'placed_students' => 92, 'higher_studies_students' => 12, 'entrepreneurs_count' => 2, 'median_salary_lpa' => 7.2]);
+            StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $caym2->id, 'final_year_students' => 118, 'placed_students' => 88, 'higher_studies_students' => 15, 'entrepreneurs_count' => 2, 'median_salary_lpa' => 6.5]);
+        }
 
         // 10. Financial Budgets (Criterion 10)
-        $cfyBudget = FinancialBudget::create([
-            'institution_id' => $inst->id,
-            'program_id' => $prog->id,
-            'academic_year_id' => $cay->id,
-            'financial_year_name' => '2024-25 (CFY)',
-            'cfy_type' => 'CFY',
-            'total_budget_allocated' => 8500000.00,
-            'total_actual_expenditure' => 7950000.00,
-            'utilization_percentage' => 93.53,
-        ]);
-        BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'Faculty & Staff Salaries', 'budget_allocated' => 5200000.00, 'actual_expenditure' => 5180000.00]);
-        BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'Software Licenses, Cloud & Subscriptions', 'budget_allocated' => 800000.00, 'actual_expenditure' => 780000.00]);
-        BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'R&D, Conferences & Faculty Travel', 'budget_allocated' => 500000.00, 'actual_expenditure' => 490000.00]);
-        BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Non-Recurring', 'sub_category' => 'AI & GPU Lab Infrastructure Upgrade', 'budget_allocated' => 2000000.00, 'actual_expenditure' => 1500000.00]);
+        if (FinancialBudget::where('program_id', $prog->id)->count() === 0) {
+            $cfyBudget = FinancialBudget::create([
+                'institution_id' => $inst->id,
+                'program_id' => $prog->id,
+                'academic_year_id' => $cay->id,
+                'financial_year_name' => '2024-25 (CFY)',
+                'cfy_type' => 'CFY',
+                'total_budget_allocated' => 8500000.00,
+                'total_actual_expenditure' => 7950000.00,
+                'utilization_percentage' => 93.53,
+            ]);
+            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'Faculty & Staff Salaries', 'budget_allocated' => 5200000.00, 'actual_expenditure' => 5180000.00]);
+            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'Software Licenses, Cloud & Subscriptions', 'budget_allocated' => 800000.00, 'actual_expenditure' => 780000.00]);
+            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'R&D, Conferences & Faculty Travel', 'budget_allocated' => 500000.00, 'actual_expenditure' => 490000.00]);
+            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Non-Recurring', 'sub_category' => 'AI & GPU Lab Infrastructure Upgrade', 'budget_allocated' => 2000000.00, 'actual_expenditure' => 1500000.00]);
 
-        $cfym1Budget = FinancialBudget::create([
-            'institution_id' => $inst->id,
-            'program_id' => $prog->id,
-            'academic_year_id' => $caym1->id,
-            'financial_year_name' => '2023-24 (CFYm1)',
-            'cfy_type' => 'CFYm1',
-            'total_budget_allocated' => 7800000.00,
-            'total_actual_expenditure' => 7420000.00,
-            'utilization_percentage' => 95.13,
-        ]);
-        BudgetItem::create(['financial_budget_id' => $cfym1Budget->id, 'category' => 'Recurring', 'sub_category' => 'Faculty & Staff Salaries', 'budget_allocated' => 4800000.00, 'actual_expenditure' => 4790000.00]);
-        BudgetItem::create(['financial_budget_id' => $cfym1Budget->id, 'category' => 'Non-Recurring', 'sub_category' => 'IoT & Embedded Systems Lab Setup', 'budget_allocated' => 1800000.00, 'actual_expenditure' => 1650000.00]);
+            $cfym1Budget = FinancialBudget::create([
+                'institution_id' => $inst->id,
+                'program_id' => $prog->id,
+                'academic_year_id' => $caym1->id,
+                'financial_year_name' => '2023-24 (CFYm1)',
+                'cfy_type' => 'CFYm1',
+                'total_budget_allocated' => 7800000.00,
+                'total_actual_expenditure' => 7420000.00,
+                'utilization_percentage' => 95.13,
+            ]);
+            BudgetItem::create(['financial_budget_id' => $cfym1Budget->id, 'category' => 'Recurring', 'sub_category' => 'Faculty & Staff Salaries', 'budget_allocated' => 4800000.00, 'actual_expenditure' => 4790000.00]);
+            BudgetItem::create(['financial_budget_id' => $cfym1Budget->id, 'category' => 'Non-Recurring', 'sub_category' => 'IoT & Embedded Systems Lab Setup', 'budget_allocated' => 1800000.00, 'actual_expenditure' => 1650000.00]);
+        }
 
         // 11. Master SAR Report
-        $sar = SarReport::create([
-            'program_id' => $prog->id,
-            'academic_year_id' => $cay->id,
-            'title' => 'Self-Assessment Report (SAR) for UG Engineering - B.Tech CSE (Tier-II)',
+        $sar = SarReport::firstOrCreate(
+            ['program_id' => $prog->id, 'academic_year_id' => $cay->id],
+            [
+                'title' => 'Self-Assessment Report (SAR) for UG Engineering - B.Tech CSE (Tier-II)',
+                'current_state' => 'DEPARTMENT_CONSOLIDATION',
+                'submitted_by' => 'Dr. S. Narayan (NBA Coordinator)',
+                'hod_verified_by' => 'Dr. Arvind Mehra (HOD CSE)',
+                'submitted_at' => now()->subDays(5),
+                'is_locked' => false,
+                'total_claimed_marks' => 842.50,
+                'workflow_notes' => 'Faculty mark entries and articulation matrix consolidated. Awaiting institutional review.',
+            ]
+        );
+
+        $sar->update([
             'current_state' => 'DEPARTMENT_CONSOLIDATION',
-            'submitted_by' => 'Dr. S. Narayan (NBA Coordinator)',
-            'hod_verified_by' => 'Dr. Arvind Mehra (HOD CSE)',
-            'submitted_at' => now()->subDays(5),
-            'is_locked' => false,
             'total_claimed_marks' => 842.50,
-            'workflow_notes' => 'Faculty mark entries and articulation matrix consolidated. Awaiting institutional review.',
         ]);
 
         // SAR Criteria 1 to 10 records
@@ -433,15 +465,16 @@ class NbaSarDatabaseSeeder extends Seeder
         ];
 
         foreach ($criteriaData as $c) {
-            SarCriterion::create([
-                'sar_report_id' => $sar->id,
-                'criterion_number' => $c['num'],
-                'title' => "Criterion {$c['num']}: {$c['title']}",
-                'max_marks' => $c['max'],
-                'claimed_marks' => $c['claimed'],
-                'status' => 'VERIFIED',
-                'is_verified' => true,
-            ]);
+            SarCriterion::updateOrCreate(
+                ['sar_report_id' => $sar->id, 'criterion_number' => $c['num']],
+                [
+                    'title' => "Criterion {$c['num']}: {$c['title']}",
+                    'max_marks' => $c['max'],
+                    'claimed_marks' => $c['claimed'],
+                    'status' => 'VERIFIED',
+                    'is_verified' => true,
+                ]
+            );
         }
 
         // Audit Logs
@@ -454,17 +487,6 @@ class NbaSarDatabaseSeeder extends Seeder
             'payload' => ['from' => 'DRAFT', 'to' => 'DEPARTMENT_CONSOLIDATION'],
             'description' => 'Submitted SAR report for Department Consolidation review.',
             'ip_address' => '192.168.1.45',
-        ]);
-
-        SarAuditLog::create([
-            'sar_report_id' => $sar->id,
-            'user_name' => 'Dr. Arvind Mehra',
-            'user_role' => 'HOD',
-            'action' => 'METRIC_CALCULATED',
-            'domain_module' => 'Faculty',
-            'payload' => ['sfr' => '16.9:1', 'fqi' => '22.8/25.0', 'cadre_ratio' => '1:2.3:5.8'],
-            'description' => 'Recalculated Criterion 5 SFR and FQI metrics for CAY 2024-25.',
-            'ip_address' => '192.168.1.12',
         ]);
     }
 }

@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\StaffManagementApiController;
+use App\Http\Controllers\Api\V1\SettingsApiController;
+use App\Http\Controllers\Api\V1\CourseManagementApiController;
+use App\Http\Controllers\Api\V1\AssessmentEntryApiController;
 use App\Http\Controllers\Api\V1\NbaDashboardApiController;
 use App\Http\Controllers\Api\V1\SfrCalculatorApiController;
 use App\Http\Controllers\Api\V1\FqiCalculatorApiController;
@@ -28,7 +31,30 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [StaffManagementApiController::class, 'destroy']);
     });
 
-    // 3. NBA SAR Engines & Matrices
+    // 3. System Settings & Branding (Super Admin)
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [SettingsApiController::class, 'index']);
+        Route::post('/', [SettingsApiController::class, 'update']);
+        Route::post('/upload-image', [SettingsApiController::class, 'uploadImage']);
+        Route::post('/reset-academic-data', [SettingsApiController::class, 'resetAcademicData']);
+        Route::post('/restore-sample-data', [SettingsApiController::class, 'restoreSampleData']);
+    });
+
+    // 4. Curriculum & Course Management CRUD
+    Route::prefix('courses')->group(function () {
+        Route::get('/', [CourseManagementApiController::class, 'index']);
+        Route::post('/', [CourseManagementApiController::class, 'store']);
+        Route::post('/{id}/co', [CourseManagementApiController::class, 'addCourseOutcome']);
+        Route::delete('/{id}', [CourseManagementApiController::class, 'destroy']);
+    });
+
+    // 5. Direct & Indirect Attainment Mark Logging
+    Route::prefix('attainment')->group(function () {
+        Route::post('/record-marks', [AssessmentEntryApiController::class, 'recordMarks']);
+        Route::post('/record-survey', [AssessmentEntryApiController::class, 'recordSurvey']);
+    });
+
+    // 6. NBA SAR Engines & Matrices
     Route::prefix('nba')->group(function () {
         // Executive Dashboard & Overview
         Route::get('/dashboard', [NbaDashboardApiController::class, 'index']);
@@ -48,6 +74,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/attainment/final', [AttainmentApiController::class, 'getFinalAttainment']);
         Route::get('/attainment/course/{courseId}', [AttainmentApiController::class, 'getCourseDirectAttainment']);
         Route::get('/attainment/indirect', [AttainmentApiController::class, 'getIndirectAttainment']);
+        Route::post('/attainment/record-marks', [AssessmentEntryApiController::class, 'recordMarks']);
+        Route::post('/attainment/record-survey', [AssessmentEntryApiController::class, 'recordSurvey']);
 
         // SAR Workflow State Engine & Audit Logs
         Route::get('/workflow/{reportId}', [SarWorkflowApiController::class, 'getStatus']);

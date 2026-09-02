@@ -10,7 +10,7 @@
           Academic Programs, Student Intake & Cohorts
         </h3>
         <p class="text-xs text-slate-400 mt-0.5">
-          Temporal academic intake tracking ($UGT_1 \dots UGT_4$) and student graduation success windows without overwriting past history.
+          Temporal academic intake tracking (UGT1 to UGT4) and student graduation success windows without overwriting past history.
         </p>
       </div>
 

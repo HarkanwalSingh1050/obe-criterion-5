@@ -105,7 +105,7 @@
         </div>
 
         <div class="text-xs text-slate-400">
-          💡 <span class="text-slate-300 font-semibold">Tip:</span> Click any cell in the table below to toggle mapping correlation (0 $\to$ 1 $\to$ 2 $\to$ 3 $\to$ 0).
+          💡 <span class="text-slate-300 font-semibold">Tip:</span> Click any cell in the table below to toggle mapping correlation (0 → 1 → 2 → 3 → 0).
         </div>
       </div>
 

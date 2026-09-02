@@ -6,117 +6,147 @@
     <!-- 2. If Authenticated -> Full Enterprise Multi-View Dashboard -->
     <div v-else class="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-indigo-500 selection:text-white">
       <!-- Collapsible Sidebar -->
-      <aside class="w-64 bg-slate-900/95 border-r border-slate-800 flex flex-col shrink-0 z-40 transition-all duration-300">
+      <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 z-40">
         <!-- Sidebar Brand Header -->
-        <div class="h-16 px-4 flex items-center space-x-3 border-b border-slate-800">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-blue-500 to-emerald-400 p-[2px] shadow-lg shadow-indigo-500/20">
-            <div class="w-full h-full bg-slate-950 rounded-[9px] flex items-center justify-center font-black text-indigo-400 text-sm">
-              NBA
-            </div>
+        <div class="h-16 px-4 flex items-center space-x-3 border-b border-slate-800 bg-slate-900/50">
+          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-sm overflow-hidden shrink-0">
+            <img v-if="branding.sidebar_logo" :src="branding.sidebar_logo" class="w-full h-full object-contain" alt="Brand Logo" />
+            <span v-else>{{ branding.app_short_name || 'NBA' }}</span>
           </div>
-          <div>
-            <h1 class="font-bold text-sm tracking-tight text-white flex items-center gap-1.5">
-              SAR Enterprise <span class="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">v2.0</span>
+          <div class="truncate">
+            <h1 class="font-bold text-sm tracking-tight text-white flex items-center gap-1.5 truncate">
+              {{ branding.app_short_name || 'NBA SAR' }}
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-medium border border-slate-700">
+                {{ branding.nba_tier || 'Tier-II' }}
+              </span>
             </h1>
-            <p class="text-[10px] text-slate-400 truncate max-w-[140px]">{{ currentUser.department || 'Institution Portal' }}</p>
+            <p class="text-[11px] text-slate-400 truncate">{{ currentUser.department || branding.institution_name || 'Institution' }}</p>
           </div>
         </div>
 
         <!-- Sidebar Navigation Links Grouped by Section -->
-        <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin">
-          <!-- Section 1: Core Dashboard -->
+        <div class="flex-1 overflow-y-auto px-3 py-4 space-y-5 scrollbar-thin">
+          <!-- Section 1: Core Dashboard & Overview -->
           <div>
-            <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Analytics & KPI</div>
-            <nav class="space-y-1">
+            <div class="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Analytics & Overview</div>
+            <nav class="space-y-0.5">
               <button @click="activeView = 'overview'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'overview' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">📊</span>
+                      :class="activeView === 'overview' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="dashboard" size="15" :custom-class="activeView === 'overview' ? 'text-white' : 'text-slate-400'" />
                 <span>Executive Dashboard</span>
+              </button>
+
+              <button @click="activeView = 'about'"
+                      class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
+                      :class="activeView === 'about' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="info" size="15" :custom-class="activeView === 'about' ? 'text-white' : 'text-slate-400'" />
+                <span>About & How It Works</span>
               </button>
             </nav>
           </div>
 
           <!-- Section 2: Administration (Super Admin / HOD Access) -->
           <div>
-            <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center justify-between">
+            <div class="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center justify-between">
               <span>Administration</span>
-              <span v-if="currentUser.role === 'Super Admin'" class="text-[9px] px-1 rounded bg-purple-500/20 text-purple-300 font-mono">ADMIN</span>
+              <span v-if="currentUser.role === 'Super Admin'" class="text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-300 font-mono font-medium border border-slate-700">SUPER</span>
             </div>
-            <nav class="space-y-1">
+            <nav class="space-y-0.5">
               <button @click="activeView = 'staff'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'staff' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">👥</span>
-                <span>Staff & Faculty Management</span>
+                      :class="activeView === 'staff' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="users" size="15" :custom-class="activeView === 'staff' ? 'text-white' : 'text-slate-400'" />
+                <span>Staff & Faculty Directory</span>
               </button>
+
               <button @click="activeView = 'academics'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'academics' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">🏛️</span>
+                      :class="activeView === 'academics' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="academic" size="15" :custom-class="activeView === 'academics' ? 'text-white' : 'text-slate-400'" />
                 <span>Programs & Intake (UGT)</span>
+              </button>
+
+              <!-- Settings Link (Super Admin) -->
+              <button v-if="currentUser.role === 'Super Admin'"
+                      @click="activeView = 'settings'"
+                      class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
+                      :class="activeView === 'settings' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="settings" size="15" :custom-class="activeView === 'settings' ? 'text-white' : 'text-slate-400'" />
+                <span>System & Photo Settings</span>
               </button>
             </nav>
           </div>
 
           <!-- Section 3: Curriculum & Attainment -->
           <div>
-            <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">OBE & Attainment</div>
-            <nav class="space-y-1">
+            <div class="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">OBE & Attainment</div>
+            <nav class="space-y-0.5">
+              <button @click="activeView = 'courses'"
+                      class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
+                      :class="activeView === 'courses' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="courses" size="15" :custom-class="activeView === 'courses' ? 'text-white' : 'text-slate-400'" />
+                <span>Courses & CO Definitions</span>
+              </button>
+
               <button @click="activeView = 'matrix'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'matrix' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">🗺️</span>
+                      :class="activeView === 'matrix' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="matrix" size="15" :custom-class="activeView === 'matrix' ? 'text-white' : 'text-slate-400'" />
                 <span>Articulation Matrix (CO-PO)</span>
               </button>
+
               <button @click="activeView = 'attainment'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'attainment' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">🎯</span>
-                <span>Attainment Evaluation Engine</span>
+                      :class="activeView === 'attainment' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="target" size="15" :custom-class="activeView === 'attainment' ? 'text-white' : 'text-slate-400'" />
+                <span>Attainment & Marks Entry</span>
               </button>
             </nav>
           </div>
 
           <!-- Section 4: Criteria Calculation Engines -->
           <div>
-            <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Calculation Engines</div>
-            <nav class="space-y-1">
+            <div class="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Calculation Engines</div>
+            <nav class="space-y-0.5">
               <button @click="activeView = 'sfr_fqi'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'sfr_fqi' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">📐</span>
+                      :class="activeView === 'sfr_fqi' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="calculator" size="15" :custom-class="activeView === 'sfr_fqi' ? 'text-white' : 'text-slate-400'" />
                 <span>SFR & FQI Simulator (Crit 5)</span>
               </button>
+
               <button @click="activeView = 'finance'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'finance' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">💰</span>
+                      :class="activeView === 'finance' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="finance" size="15" :custom-class="activeView === 'finance' ? 'text-white' : 'text-slate-400'" />
                 <span>Financial Budgets (Crit 10)</span>
               </button>
+
               <button @click="activeView = 'criteria'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'criteria' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">📑</span>
-                <span>Criteria 1 - 10 Breakdown</span>
+                      :class="activeView === 'criteria' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="criteria" size="15" :custom-class="activeView === 'criteria' ? 'text-white' : 'text-slate-400'" />
+                <span>Criteria 1 - 10 Master</span>
               </button>
             </nav>
           </div>
 
           <!-- Section 5: Compliance & Reporting -->
           <div>
-            <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Compliance & Output</div>
-            <nav class="space-y-1">
+            <div class="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Compliance & Output</div>
+            <nav class="space-y-0.5">
               <button @click="activeView = 'workflow'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'workflow' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">🛡️</span>
+                      :class="activeView === 'workflow' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="workflow" size="15" :custom-class="activeView === 'workflow' ? 'text-white' : 'text-slate-400'" />
                 <span>SAR State Machine & Audit</span>
               </button>
+
               <button @click="activeView = 'document'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
-                      :class="activeView === 'document' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'">
-                <span class="text-sm">🖨️</span>
+                      :class="activeView === 'document' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
+                <AppIcon name="printer" size="15" :custom-class="activeView === 'document' ? 'text-white' : 'text-slate-400'" />
                 <span>Official Printable Report</span>
               </button>
             </nav>
@@ -124,19 +154,19 @@
         </div>
 
         <!-- Sidebar User Card Footer -->
-        <div class="p-3 border-t border-slate-800 bg-slate-950/60">
+        <div class="p-3 border-t border-slate-800 bg-slate-950/80">
           <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2 truncate">
-              <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-white text-xs shrink-0">
+            <div class="flex items-center space-x-2.5 truncate">
+              <div class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-200 text-xs shrink-0">
                 {{ currentUser.name.charAt(0) }}
               </div>
               <div class="truncate">
-                <div class="text-xs font-bold text-white truncate">{{ currentUser.name }}</div>
+                <div class="text-xs font-semibold text-white truncate">{{ currentUser.name }}</div>
                 <div class="text-[10px] text-slate-400">{{ currentUser.role }}</div>
               </div>
             </div>
             <button @click="handleLogout" title="Sign Out"
-                    class="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition">
+                    class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             </button>
           </div>
@@ -146,26 +176,26 @@
       <!-- Main App Content Area -->
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <!-- Top Navigation Header -->
-        <header class="h-16 bg-slate-900/80 border-b border-slate-800 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+        <header class="h-16 bg-slate-900 border-b border-slate-800 px-6 flex items-center justify-between sticky top-0 z-30">
           <div class="flex items-center space-x-4">
             <div class="text-xs text-slate-400">
-              Active Module: <strong class="text-white capitalize">{{ currentViewTitle }}</strong>
+              Active Module: <strong class="text-slate-200 capitalize font-semibold">{{ currentViewTitle }}</strong>
             </div>
           </div>
 
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-3">
             <!-- Accreditation Status Badge -->
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide border shadow-sm"
+            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border"
                   :class="statusBadgeClass(sarData.current_state)">
-              <span class="w-2 h-2 rounded-full mr-2" :class="statusDotClass(sarData.current_state)"></span>
+              <span class="w-1.5 h-1.5 rounded-full mr-2" :class="statusDotClass(sarData.current_state)"></span>
               {{ formatState(sarData.current_state) }}
             </span>
 
             <!-- Quick Print Button -->
             <button @click="activeView = 'document'"
-                    class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-indigo-600/25 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-              Print SAR
+                    class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-medium border border-slate-700 flex items-center gap-1.5 transition">
+              <AppIcon name="printer" size="13" />
+              <span>Print SAR</span>
             </button>
           </div>
         </header>
@@ -183,49 +213,64 @@
               <ExecutiveDashboard :sar="sarData" @navigate="(view) => activeView = view" />
             </section>
 
-            <!-- 2. Staff Management View -->
+            <!-- 2. About & How It Works View -->
+            <section v-if="activeView === 'about'">
+              <AboutSystemView @navigate="(view) => activeView = view" />
+            </section>
+
+            <!-- 3. Staff Management View -->
             <section v-if="activeView === 'staff'">
               <StaffManagementView />
             </section>
 
-            <!-- 3. Academics & Intake View -->
+            <!-- 4. System & Branding Settings View (Super Admin) -->
+            <section v-if="activeView === 'settings'">
+              <SettingsView @settings-updated="onSettingsUpdated" />
+            </section>
+
+            <!-- 5. Academics & Intake View -->
             <section v-if="activeView === 'academics'">
               <AcademicsIntakeView :sar="sarData" />
             </section>
 
-            <!-- 4. Articulation Matrix View -->
+            <!-- 6. Courses & CO Definitions (CRUD) -->
+            <section v-if="activeView === 'courses'">
+              <CoursesManagementView :program-id="sarData.program?.id" @updated="refreshData" />
+            </section>
+
+            <!-- 7. Articulation Matrix View -->
             <section v-if="activeView === 'matrix'">
               <ArticulationMatrixEditor :program-id="sarData.program?.id" @updated="refreshData" />
             </section>
 
-            <!-- 5. Attainment View -->
+            <!-- 8. Attainment View & Marks Logger -->
             <section v-if="activeView === 'attainment'">
-              <AttainmentDashboard :attainment="sarData.live_engines?.attainment" :program-id="sarData.program?.id" />
+              <AttainmentDashboard :attainment="sarData.live_engines?.attainment" :program-id="sarData.program?.id" @updated="refreshData" />
             </section>
 
-            <!-- 6. SFR & FQI Engine View -->
+            <!-- 9. SFR & FQI Engine View -->
             <section v-if="activeView === 'sfr_fqi'">
               <SfrSimulator :sfr="sarData.live_engines?.sfr" :program="sarData.program" />
               <div class="my-8 border-t border-slate-800"></div>
               <FqiSimulator :fqi="sarData.live_engines?.fqi" :cadre="sarData.live_engines?.cadre" :program="sarData.program" />
             </section>
 
-            <!-- 7. Financial & Governance View -->
+            <!-- 10. Financial & Governance View -->
             <section v-if="activeView === 'finance'">
               <FinanceGovernanceView :sar="sarData" />
             </section>
 
-            <!-- 8. Criteria 1 to 10 View -->
+            <!-- 11. Criteria 1 to 10 View -->
             <section v-if="activeView === 'criteria'">
               <CriteriaExplorer :criteria="sarData.criteria" :sar="sarData" />
             </section>
 
-            <!-- 9. SAR Workflow View -->
+            <!-- 12. SAR Workflow View -->
             <section v-if="activeView === 'workflow'">
               <SarWorkflowPanel :report-id="sarData.report_id" @state-changed="refreshData" />
             </section>
 
-            <!-- 10. Printable Official SAR Document -->
+            <!-- 13. Printable Official SAR Document -->
             <section v-if="activeView === 'document'">
               <PrintableSarReport :sar="sarData" />
             </section>
@@ -238,8 +283,12 @@
 
 <script>
 import axios from 'axios';
+import AppIcon from './AppIcon.vue';
 import LoginView from './LoginView.vue';
+import AboutSystemView from './AboutSystemView.vue';
 import StaffManagementView from './StaffManagementView.vue';
+import SettingsView from './SettingsView.vue';
+import CoursesManagementView from './CoursesManagementView.vue';
 import ExecutiveDashboard from './ExecutiveDashboard.vue';
 import AcademicsIntakeView from './AcademicsIntakeView.vue';
 import SfrSimulator from './SfrSimulator.vue';
@@ -254,8 +303,12 @@ import PrintableSarReport from './PrintableSarReport.vue';
 export default {
   name: 'MainApp',
   components: {
+    AppIcon,
     LoginView,
+    AboutSystemView,
     StaffManagementView,
+    SettingsView,
+    CoursesManagementView,
     ExecutiveDashboard,
     AcademicsIntakeView,
     SfrSimulator,
@@ -273,14 +326,25 @@ export default {
       loading: true,
       activeView: 'overview',
       sarData: {},
+      branding: {
+        app_name: 'NBA SAR & OBE Platform',
+        app_short_name: 'NBA',
+        nba_tier: 'Tier-II',
+        institution_name: 'National Institute of Engineering & Technology',
+        sidebar_logo: '',
+        favicon: '',
+      },
     };
   },
   computed: {
     currentViewTitle() {
       const titles = {
         overview: 'Executive Dashboard & KPI Scores',
-        staff: 'Staff & Faculty Management',
+        about: 'About System & Operational Workflow Guide',
+        staff: 'Staff & Faculty Directory Management',
+        settings: 'System Branding & Photo Settings',
         academics: 'Programs & Student Intake Cohorts',
+        courses: 'Course Catalog & Outcome Definitions (COs)',
         matrix: 'Curriculum Articulation Matrix (CO-PO)',
         attainment: 'Direct & Indirect Attainment Pipeline',
         sfr_fqi: 'Faculty Indices (SFR & FQI Calculation)',
@@ -293,9 +357,26 @@ export default {
     },
   },
   mounted() {
+    this.fetchBranding();
     this.checkAuth();
   },
   methods: {
+    async fetchBranding() {
+      try {
+        const res = await axios.get('/api/v1/settings');
+        if (res.data && res.data.success) {
+          this.branding = { ...this.branding, ...res.data.data };
+          if (this.branding.favicon) {
+            let link = document.querySelector("link[rel~='icon']");
+            if (link) link.href = this.branding.favicon;
+          }
+        }
+      } catch (err) {}
+    },
+    onSettingsUpdated(updatedSettings) {
+      this.branding = { ...this.branding, ...updatedSettings };
+      this.fetchDashboardData();
+    },
     async checkAuth() {
       try {
         const res = await axios.get('/api/v1/auth/me');
