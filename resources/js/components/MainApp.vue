@@ -1,7 +1,13 @@
 <template>
   <div>
+    <!-- 0. Smooth Splash Loader during initial session check (prevents login screen flash) -->
+    <div v-if="authChecking" class="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-4">
+      <div class="w-10 h-10 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+      <div class="text-xs text-slate-400 font-mono tracking-wider">Validating encrypted session...</div>
+    </div>
+
     <!-- 1. If Not Authenticated -> Show Login View -->
-    <LoginView v-if="!currentUser" @authenticated="handleAuthenticated" />
+    <LoginView v-else-if="!currentUser" @authenticated="handleAuthenticated" />
 
     <!-- 2. If Authenticated -> Full Enterprise Multi-View Dashboard -->
     <div v-else class="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-indigo-500 selection:text-white relative overflow-hidden">
@@ -334,6 +340,7 @@ export default {
   data() {
     return {
       currentUser: null,
+      authChecking: true,
       loading: true,
       activeView: 'overview',
       sarData: {},
@@ -401,6 +408,8 @@ export default {
       } catch (err) {
         this.currentUser = null;
         this.loading = false;
+      } finally {
+        this.authChecking = false;
       }
     },
     handleAuthenticated(user) {
