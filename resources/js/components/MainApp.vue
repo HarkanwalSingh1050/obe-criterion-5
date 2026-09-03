@@ -105,7 +105,47 @@
                 <AppIcon name="courses" size="15" :custom-class="activeView === 'courses' ? 'text-white' : 'text-slate-400'" />
                 <span>Courses & CO Definitions</span>
               </button>
+<button
+    @click="activeView = 'blueprint'"
+    class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
+    :class="activeView === 'blueprint' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800'"
+>
 
+    <AppIcon
+        name="target"
+        size="15"
+        :custom-class="activeView === 'blueprint' ? 'text-white' : 'text-slate-400'"
+    />
+    <span>Assessment Blueprint</span>
+</button>
+<button
+    @click="activeView = 'marks_upload'"
+    class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition-all"
+    :class="activeView === 'marks_upload'
+        ? 'bg-indigo-600 text-white shadow-lg'
+        : 'text-slate-300 hover:bg-slate-800 hover:text-white'"
+>
+    <AppIcon
+        name="upload"
+        size="15"
+        :custom-class="activeView === 'marks_upload' ? 'text-white' : 'text-slate-400'"
+    />
+    <span>Student Marks Upload</span>
+</button>
+<button
+    @click="activeView = 'performance'"
+    class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition"
+    :class="activeView === 'performance'
+        ? 'bg-indigo-600 text-white shadow-lg'
+        : 'text-slate-300 hover:bg-slate-800 hover:text-white'"
+>
+    <AppIcon
+        name="chart"
+        size="15"
+        :custom-class="activeView === 'performance' ? 'text-white' : 'text-slate-400'"
+    />
+    <span>Year-on-Year Performance</span>
+</button>
               <button @click="activeView = 'matrix'"
                       class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
                       :class="activeView === 'matrix' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'">
@@ -259,7 +299,29 @@
             <section v-if="activeView === 'matrix'">
               <ArticulationMatrixEditor :program-id="sarData.program?.id" @updated="refreshData" />
             </section>
+            <!-- 7A. Assessment Blueprint View -->
+<section v-if="activeView === 'blueprint'">
+    <AssessmentBlueprintView
+        :program-id="sarData.program?.id"
+        @updated="refreshData"
+    />
+</section>
 
+<!-- 7B. Course Performance Year-on-Year View -->
+<section v-if="activeView === 'performance'">
+    <CoursePerformanceView
+        :program-id="sarData.program?.id"
+    />
+</section>
+
+<!-- 7C. Student Marks Upload View -->
+<section v-if="activeView === 'marks_upload'">
+    <StudentMarksUploadView
+        :program-id="sarData.program.id"
+        @updated="refreshData"
+    />
+</section>
+           
             <!-- 8. Attainment View & Marks Logger -->
             <section v-if="activeView === 'attainment'">
               <AttainmentDashboard :attainment="sarData.live_engines?.attainment" :program-id="sarData.program?.id" @updated="refreshData" />
@@ -301,6 +363,7 @@
 <script>
 import axios from 'axios';
 import AppIcon from './AppIcon.vue';
+import AssessmentBlueprintView from './AssessmentBlueprintView.vue';
 import LoginView from './LoginView.vue';
 import AboutSystemView from './AboutSystemView.vue';
 import StaffManagementView from './StaffManagementView.vue';
@@ -316,12 +379,15 @@ import FinanceGovernanceView from './FinanceGovernanceView.vue';
 import CriteriaExplorer from './CriteriaExplorer.vue';
 import SarWorkflowPanel from './SarWorkflowPanel.vue';
 import PrintableSarReport from './PrintableSarReport.vue';
-
+import StudentMarksUploadView from './StudentMarksUploadView.vue';
+import CoursePerformanceView from './CoursePerformanceView.vue';
 export default {
   name: 'MainApp',
   components: {
     AppIcon,
+StudentMarksUploadView,
     LoginView,
+    AssessmentBlueprintView,
     AboutSystemView,
     StaffManagementView,
     SettingsView,
@@ -336,6 +402,7 @@ export default {
     CriteriaExplorer,
     SarWorkflowPanel,
     PrintableSarReport,
+    CoursePerformanceView,
   },
   data() {
     return {
@@ -364,12 +431,15 @@ export default {
         academics: 'Programs & Student Intake Cohorts',
         courses: 'Course Catalog & Outcome Definitions (COs)',
         matrix: 'Curriculum Articulation Matrix (CO-PO)',
+        blueprint: 'Assessment Blueprint',
+        marks_upload: 'Student Marks Upload',
         attainment: 'Direct & Indirect Attainment Pipeline',
         sfr_fqi: 'Faculty Indices (SFR & FQI Calculation)',
         finance: 'Financial Resources & Budget Utilization',
         criteria: 'Criteria 1 - 10 Self-Assessment Breakdown',
         workflow: 'SAR Approval State Machine & Audit Trail',
         document: 'Official NBA Tier-II SAR Report Document',
+        performance: 'Year-on-Year Course Performance',
       };
       return titles[this.activeView] || this.activeView;
     },

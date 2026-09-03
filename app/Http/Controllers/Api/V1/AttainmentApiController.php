@@ -71,6 +71,24 @@ class AttainmentApiController extends Controller
     }
 
     /**
+     * Get Course Performance Year-on-Year
+     */
+    public function getCoursePerformance(int $courseId): JsonResponse
+    {
+        $course = Course::with('courseOutcomes', 'program')->find($courseId);
+        if (!$course) {
+            return response()->json(['success' => false, 'message' => 'Course not found'], 404);
+        }
+
+        $res = $this->directService->computeCoursePerformanceYearOnYear($course);
+
+        return response()->json([
+            'success' => true,
+            'data' => $res,
+        ]);
+    }
+
+    /**
      * Get Indirect Attainment Breakdown (Exit, Alumni, Employer surveys)
      */
     public function getIndirectAttainment(Request $request): JsonResponse

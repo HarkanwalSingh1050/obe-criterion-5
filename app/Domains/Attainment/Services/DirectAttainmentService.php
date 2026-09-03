@@ -86,4 +86,33 @@ class DirectAttainmentService
             'course_direct_average' => $courseAvg,
         ];
     }
+
+    /**
+     * Compute Direct Attainment Year-on-Year for a Course
+     */
+    public function computeCoursePerformanceYearOnYear(Course $course): array
+    {
+        $years = AcademicYear::orderBy('start_date', 'asc')->get();
+        $performance = [];
+
+        foreach ($years as $year) {
+            $courseData = $this->computeCourseDirectAttainment($course, $year);
+            // We only include it if there is actual data. We could check if assessments exist.
+            // But computeCourseDirectAttainment always returns averages, defaulting to 2.4/2.5 if no assessments.
+            // Let's see if we can check for student assessments to avoid fake data.
+            $hasData = StudentAssessment::whereIn('course_outcome_id', $course->courseOutcomes->pluck('id'))
+                ->where('academic_year_id', $year->id)
+                ->exists();
+
+            if ($hasData) {
+                $performance[] = [
+                    'year_id' => $year->id,
+                    'year' => $year->name,
+                    'score' => $courseData['course_direct_average']
+                ];
+            }
+        }
+
+        return $performance;
+    }
 }
