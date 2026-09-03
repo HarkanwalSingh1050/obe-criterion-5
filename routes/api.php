@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\V1\ArticulationMatrixApiController;
 use App\Http\Controllers\Api\V1\AttainmentApiController;
 use App\Http\Controllers\Api\V1\SarWorkflowApiController;
 use App\Http\Controllers\Api\V1\SarReportExportApiController;
+use App\Http\Controllers\Api\V1\StudentMarksCsvController;
+use App\Http\Controllers\Api\V1\AssessmentBlueprintController;
 
 Route::prefix('v1')->group(function () {
     // 1. Authentication & Session
@@ -29,6 +31,19 @@ Route::prefix('v1')->group(function () {
         Route::put('/{id}', [StaffManagementApiController::class, 'update']);
         Route::post('/{id}/toggle-status', [StaffManagementApiController::class, 'toggleStatus']);
         Route::delete('/{id}', [StaffManagementApiController::class, 'destroy']);
+        Route::post(
+    '/assessments/{assessmentBatch}/marks/upload',
+    [StudentMarksCsvController::class, 'upload']
+);
+Route::post(
+    '/assessments/blueprint',
+    [AssessmentBlueprintController::class, 'store']
+);
+
+Route::get(
+    '/assessments/{assessmentBatch}/blueprint',
+    [AssessmentBlueprintController::class, 'show']
+);
     });
 
     // 3. System Settings & Branding (Super Admin)
@@ -73,6 +88,7 @@ Route::prefix('v1')->group(function () {
         // Criterion 3: Attainment (Direct, Indirect, Final PO Attainment)
         Route::get('/attainment/final', [AttainmentApiController::class, 'getFinalAttainment']);
         Route::get('/attainment/course/{courseId}', [AttainmentApiController::class, 'getCourseDirectAttainment']);
+        Route::get('/attainment/course/{courseId}/performance', [AttainmentApiController::class, 'getCoursePerformance']);
         Route::get('/attainment/indirect', [AttainmentApiController::class, 'getIndirectAttainment']);
         Route::post('/attainment/record-marks', [AssessmentEntryApiController::class, 'recordMarks']);
         Route::post('/attainment/record-survey', [AssessmentEntryApiController::class, 'recordSurvey']);
