@@ -169,6 +169,11 @@ class NbaSarDatabaseSeeder extends Seeder
             ['name' => 'Prof. Meenakshi S.', 'faculty_id' => 'FAC-CSE-020', 'degree' => 'M.Tech AI & Robotics', 'cadre' => 'Assistant Professor', 'exp' => 2, 'joining' => '2024-01-10'],
             ['name' => 'Prof. Nitin Chawla', 'faculty_id' => 'FAC-CSE-021', 'degree' => 'M.Tech Blockchain Technologies', 'cadre' => 'Assistant Professor', 'exp' => 2, 'joining' => '2024-06-01'],
             ['name' => 'Prof. Ananya Mukherjee', 'faculty_id' => 'FAC-CSE-022', 'degree' => 'M.Tech Human Computer Interaction', 'cadre' => 'Assistant Professor', 'exp' => 1, 'joining' => '2024-07-01'],
+            ['name' => 'Dr. Karan Malhotra', 'faculty_id' => 'FAC-CSE-023', 'degree' => 'Ph.D. Computer Science', 'cadre' => 'Associate Professor', 'exp' => 10, 'joining' => '2019-08-01'],
+            ['name' => 'Prof. Riya Kapoor', 'faculty_id' => 'FAC-CSE-024', 'degree' => 'M.Tech Software Systems', 'cadre' => 'Assistant Professor', 'exp' => 5, 'joining' => '2021-08-02'],
+            ['name' => 'Prof. Aditya Menon', 'faculty_id' => 'FAC-CSE-025', 'degree' => 'M.Tech Artificial Intelligence', 'cadre' => 'Assistant Professor', 'exp' => 4, 'joining' => '2022-07-04'],
+            ['name' => 'Prof. Simran Kaur', 'faculty_id' => 'FAC-CSE-026', 'degree' => 'M.Tech Data Engineering', 'cadre' => 'Assistant Professor', 'exp' => 3, 'joining' => '2023-07-03'],
+            ['name' => 'Prof. Arjun Verma', 'faculty_id' => 'FAC-CSE-027', 'degree' => 'M.Tech Computer Science', 'cadre' => 'Assistant Professor', 'exp' => 2, 'joining' => '2024-07-08'],
         ];
 
         foreach ($facultyData as $f) {
@@ -269,21 +274,344 @@ class NbaSarDatabaseSeeder extends Seeder
                 ['title' => $p['title'], 'description' => $p['desc']]
             );
         }
-
-        // 7. Courses & Articulation Matrix (Only seed if courses count is 0)
+        // 7. Courses & Articulation Matrix
+        // Realistic B.Tech CSE course catalog covering Sem 1 to Sem 8
         if (Course::where('program_id', $prog->id)->count() === 0) {
+
             $coursesData = [
-                ['code' => 'CS301', 'name' => 'Data Structures and Algorithms', 'sem' => 3, 'credits' => 4.0],
-                ['code' => 'CS401', 'name' => 'Database Management Systems', 'sem' => 4, 'credits' => 4.0],
-                ['code' => 'CS501', 'name' => 'Operating Systems & Concurrency', 'sem' => 5, 'credits' => 3.5],
-                ['code' => 'CS502', 'name' => 'Computer Networks & Protocols', 'sem' => 5, 'credits' => 3.5],
-                ['code' => 'CS601', 'name' => 'Artificial Intelligence & Machine Learning', 'sem' => 6, 'credits' => 4.0],
-                ['code' => 'CS602', 'name' => 'Software Engineering & Agile Methodologies', 'sem' => 6, 'credits' => 3.0],
-                ['code' => 'CS701', 'name' => 'Cloud Computing & Distributed Systems', 'sem' => 7, 'credits' => 3.5],
-                ['code' => 'CS801', 'name' => 'Cybersecurity & Cryptographic Protocols', 'sem' => 8, 'credits' => 3.0],
+
+                // ==================== SEMESTER 1 ====================
+                [
+                    'code' => 'MA101',
+                    'name' => 'Engineering Mathematics-I',
+                    'sem' => 1,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Apply differential calculus techniques to solve engineering problems.',
+                        'Use matrices and determinants to model and solve systems of linear equations.',
+                        'Apply integral calculus to compute engineering quantities and evaluate functions.',
+                        'Analyze sequences, series and multivariable functions using appropriate mathematical techniques.',
+                        'Solve basic engineering problems using differential equations and mathematical models.',
+                    ],
+                ],
+                [
+                    'code' => 'PH101',
+                    'name' => 'Engineering Physics',
+                    'sem' => 1,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain fundamental principles of mechanics, waves and oscillations used in engineering.',
+                        'Apply electromagnetic theory to solve basic engineering problems.',
+                        'Analyze optical phenomena using principles of interference, diffraction and polarization.',
+                        'Explain the physical principles of lasers, fibre optics and semiconductor materials.',
+                        'Apply concepts of modern physics to engineering and computing applications.',
+                    ],
+                ],
+                [
+                    'code' => 'CS101',
+                    'name' => 'Programming for Problem Solving',
+                    'sem' => 1,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain fundamental programming concepts including variables, data types, operators and control structures.',
+                        'Develop programs using functions, arrays, strings and structured programming techniques.',
+                        'Apply pointers, structures and dynamic memory concepts to solve computational problems.',
+                        'Analyze programming problems and design appropriate algorithms before implementation.',
+                        'Develop, test and debug C programs using systematic problem-solving techniques.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 2 ====================
+                [
+                    'code' => 'MA102',
+                    'name' => 'Engineering Mathematics-II',
+                    'sem' => 2,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Apply differential equations to formulate engineering and computing models.',
+                        'Use Laplace transforms to solve linear differential equations and system problems.',
+                        'Apply Fourier series and transforms to analyze periodic and continuous signals.',
+                        'Use vector calculus concepts to solve engineering field problems.',
+                        'Analyze mathematical models using appropriate numerical and analytical techniques.',
+                    ],
+                ],
+                [
+                    'code' => 'CS102',
+                    'name' => 'Data Structures',
+                    'sem' => 2,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain abstract data types and analyze the complexity of basic data structure operations.',
+                        'Implement linear data structures including arrays, linked lists, stacks and queues.',
+                        'Implement and analyze trees, binary search trees and priority queues.',
+                        'Apply hashing and graph data structures to solve computational problems.',
+                        'Select appropriate data structures based on problem requirements and efficiency constraints.',
+                    ],
+                ],
+                [
+                    'code' => 'CS103',
+                    'name' => 'Digital Logic and Computer Organization',
+                    'sem' => 2,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain number systems, Boolean algebra and fundamental digital logic concepts.',
+                        'Design combinational and sequential digital circuits using logic gates and flip-flops.',
+                        'Explain the organization and functional components of a digital computer.',
+                        'Analyze CPU, memory hierarchy and input-output organization.',
+                        'Apply computer organization principles to understand the execution of machine-level instructions.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 3 ====================
+                [
+                    'code' => 'CS201',
+                    'name' => 'Discrete Mathematics',
+                    'sem' => 4.0,
+                    'sem' => 3,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Apply propositional and predicate logic to formulate and verify computational statements.',
+                        'Use set theory, relations and functions to model computer science problems.',
+                        'Apply combinatorics and recurrence relations to solve counting and algorithmic problems.',
+                        'Analyze graphs and trees for modelling networks and computational structures.',
+                        'Apply discrete mathematical techniques to support algorithm and software design.',
+                    ],
+                ],
+                [
+                    'code' => 'CS202',
+                    'name' => 'Object Oriented Programming',
+                    'sem' => 3,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain object-oriented programming concepts including classes, objects and encapsulation.',
+                        'Implement inheritance, polymorphism and abstraction to build reusable software components.',
+                        'Apply exception handling, generic programming and collection concepts in application development.',
+                        'Analyze software problems and design object-oriented solutions using appropriate class relationships.',
+                        'Develop and test modular applications using object-oriented programming principles.',
+                    ],
+                ],
+                [
+                    'code' => 'CS203',
+                    'name' => 'Computer Organization and Architecture',
+                    'sem' => 3,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain instruction set architecture and the organization of computer systems.',
+                        'Analyze CPU datapath, control unit and instruction execution mechanisms.',
+                        'Evaluate different memory technologies and memory hierarchy organizations.',
+                        'Explain pipelining, cache organization and performance improvement techniques.',
+                        'Analyze processor and I/O architectures for performance-oriented computing systems.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 4 ====================
+                [
+                    'code' => 'CS301',
+                    'name' => 'Data Structures and Algorithms',
+                    'sem' => 4,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Analyze the time and space complexity of fundamental algorithms.',
+                        'Implement sorting and searching algorithms and compare their performance.',
+                        'Apply divide-and-conquer, greedy and dynamic programming techniques to computational problems.',
+                        'Design graph algorithms for traversal, shortest path and connectivity problems.',
+                        'Select and justify efficient algorithmic solutions based on problem constraints.',
+                    ],
+                ],
+                [
+                    'code' => 'CS302',
+                    'name' => 'Database Management Systems',
+                    'sem' => 4,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain database architecture, relational models and database management concepts.',
+                        'Design normalized relational schemas using keys, constraints and functional dependencies.',
+                        'Develop SQL queries for data definition, manipulation, aggregation and transaction processing.',
+                        'Analyze transaction management, concurrency control and database recovery mechanisms.',
+                        'Design and implement a database solution for a real-world application.',
+                    ],
+                ],
+                [
+                    'code' => 'CS303',
+                    'name' => 'Probability and Statistics',
+                    'sem' => 4,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Apply probability concepts to model uncertain events and random processes.',
+                        'Use probability distributions to analyze engineering and computing datasets.',
+                        'Apply statistical estimation and hypothesis testing techniques to real-world problems.',
+                        'Analyze correlation and regression models for identifying relationships among variables.',
+                        'Interpret statistical results and use them to support data-driven decisions.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 5 ====================
+                [
+                    'code' => 'CS401',
+                    'name' => 'Operating Systems',
+                    'sem' => 5,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain operating system architecture, services and system call mechanisms.',
+                        'Analyze process scheduling, synchronization and inter-process communication techniques.',
+                        'Apply memory management and virtual memory concepts to operating system problems.',
+                        'Analyze file systems, storage management and I/O organization.',
+                        'Evaluate operating system mechanisms for performance, reliability and resource management.',
+                    ],
+                ],
+                [
+                    'code' => 'CS402',
+                    'name' => 'Computer Networks',
+                    'sem' => 5,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain layered network architectures and fundamental communication protocols.',
+                        'Analyze data-link, network and transport layer mechanisms.',
+                        'Apply IP addressing, routing and subnetting techniques to network design problems.',
+                        'Analyze TCP, UDP, DNS, HTTP and other application-layer protocols.',
+                        'Design and evaluate reliable computer network solutions for practical applications.',
+                    ],
+                ],
+                [
+                    'code' => 'CS403',
+                    'name' => 'Software Engineering',
+                    'sem' => 5,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Explain software development life-cycle models and engineering principles.',
+                        'Apply requirements engineering techniques to specify software systems.',
+                        'Design software architectures using appropriate modelling and design principles.',
+                        'Apply software testing techniques to verify and validate software products.',
+                        'Manage software projects using version control, Agile practices and quality assurance methods.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 6 ====================
+                [
+                    'code' => 'CS501',
+                    'name' => 'Artificial Intelligence and Machine Learning',
+                    'sem' => 6,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain fundamental concepts and paradigms of artificial intelligence.',
+                        'Apply supervised and unsupervised learning algorithms to structured datasets.',
+                        'Evaluate machine learning models using suitable performance metrics.',
+                        'Design machine learning pipelines including preprocessing, training and validation.',
+                        'Develop an AI/ML solution for a real-world computational problem.',
+                    ],
+                ],
+                [
+                    'code' => 'CS502',
+                    'name' => 'Web Technologies',
+                    'sem' => 6,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Explain client-server architecture and fundamental web technologies.',
+                        'Develop responsive web interfaces using HTML, CSS and JavaScript.',
+                        'Implement interactive web applications using modern JavaScript concepts.',
+                        'Integrate web applications with RESTful APIs and databases.',
+                        'Develop and test a secure and responsive full-stack web application.',
+                    ],
+                ],
+                [
+                    'code' => 'CS503',
+                    'name' => 'Theory of Computation',
+                    'sem' => 6,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain formal languages, grammars and finite automata.',
+                        'Design deterministic and nondeterministic finite automata for regular languages.',
+                        'Apply context-free grammars and pushdown automata to language recognition problems.',
+                        'Analyze Turing machines and computational models.',
+                        'Determine the decidability and computational complexity of selected problems.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 7 ====================
+                [
+                    'code' => 'CS601',
+                    'name' => 'Cloud Computing and Distributed Systems',
+                    'sem' => 7,
+                    'credits' => 4.0,
+                    'cos' => [
+                        'Explain cloud computing service models, deployment models and virtualization concepts.',
+                        'Analyze distributed system architectures and communication mechanisms.',
+                        'Apply cloud storage, compute and networking concepts to application deployment.',
+                        'Evaluate scalability, availability and fault-tolerance mechanisms in distributed systems.',
+                        'Design a cloud-based distributed solution for a real-world application.',
+                    ],
+                ],
+                [
+                    'code' => 'CS602',
+                    'name' => 'Cybersecurity and Cryptographic Protocols',
+                    'sem' => 7,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Explain fundamental cybersecurity threats, vulnerabilities and security principles.',
+                        'Apply symmetric and asymmetric cryptographic techniques to secure information.',
+                        'Analyze authentication, authorization and access-control mechanisms.',
+                        'Evaluate common network and application security vulnerabilities.',
+                        'Design basic security controls for protecting information systems and applications.',
+                    ],
+                ],
+                [
+                    'code' => 'CS603',
+                    'name' => 'Big Data Analytics',
+                    'sem' => 7,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Explain big data characteristics, architectures and distributed data processing models.',
+                        'Apply data preprocessing and storage techniques to large datasets.',
+                        'Use distributed computing frameworks for processing large-scale datasets.',
+                        'Analyze datasets using appropriate statistical and machine learning techniques.',
+                        'Develop a scalable analytics solution for a real-world big data problem.',
+                    ],
+                ],
+
+                // ==================== SEMESTER 8 ====================
+                [
+                    'code' => 'CS701',
+                    'name' => 'Software Project',
+                    'sem' => 8,
+                    'credits' => 6.0,
+                    'cos' => [
+                        'Identify and formulate a real-world computing problem using appropriate engineering methods.',
+                        'Analyze requirements and design a technically feasible software solution.',
+                        'Implement and integrate software components using appropriate development tools.',
+                        'Validate the developed solution using systematic testing and evaluation techniques.',
+                        'Document and present the complete project demonstrating professional engineering practice.',
+                    ],
+                ],
+                [
+                    'code' => 'CS702',
+                    'name' => 'Blockchain Technology',
+                    'sem' => 8,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Explain blockchain architecture, distributed ledgers and consensus mechanisms.',
+                        'Analyze cryptographic primitives used for blockchain security.',
+                        'Develop basic smart contracts using blockchain programming frameworks.',
+                        'Evaluate blockchain applications in different industry domains.',
+                        'Design a blockchain-based solution for a suitable real-world problem.',
+                    ],
+                ],
+                [
+                    'code' => 'CS703',
+                    'name' => 'Generative AI and Natural Language Processing',
+                    'sem' => 8,
+                    'credits' => 3.0,
+                    'cos' => [
+                        'Explain fundamental concepts of natural language processing and generative AI.',
+                        'Apply text preprocessing and representation techniques to language datasets.',
+                        'Analyze transformer-based architectures and language model capabilities.',
+                        'Evaluate generative AI systems using appropriate quality, safety and performance measures.',
+                        'Develop a prototype NLP or generative AI application for a real-world use case.',
+                    ],
+                ],
             ];
 
             foreach ($coursesData as $c) {
+
                 $course = Course::create([
                     'program_id' => $prog->id,
                     'academic_year_id' => $cay->id,
@@ -297,43 +625,73 @@ class NbaSarDatabaseSeeder extends Seeder
                     'course_type' => 'Core',
                 ]);
 
-                // Create 5 Course Outcomes per course
-                for ($i = 1; $i <= 5; $i++) {
+                // Create 5 meaningful Course Outcomes per course
+                foreach ($c['cos'] as $index => $description) {
+
+                    $coNumber = $index + 1;
+
+                    $bloomLevel = match ($coNumber) {
+                        1 => 'Understand',
+                        2 => 'Apply',
+                        3 => 'Apply',
+                        4 => 'Analyze',
+                        5 => 'Create',
+                    };
+
                     $co = CourseOutcome::create([
                         'course_id' => $course->id,
-                        'co_code' => "CO{$i}",
-                        'description' => "Demonstrate proficiency in {$c['name']} objective {$i} with algorithmic design and practical implementation.",
+                        'co_code' => "CO{$coNumber}",
+                        'description' => $description,
                         'target_percentage' => 65.0,
                         'target_level' => 2.5,
-                        'bloom_level' => $i <= 2 ? 'Understand' : ($i <= 4 ? 'Apply' : 'Analyze'),
+                        'bloom_level' => $bloomLevel,
                     ]);
 
-                    // Map CO to POs (Correlation levels 1, 2, 3)
-                    $mapPos = ['PO1' => 3, 'PO2' => 3, 'PO3' => 2, 'PO5' => 3, 'PO9' => 2, 'PO12' => 2];
+                    // CO-PO articulation matrix
+                    $mapPos = [
+                        'PO1' => 3,
+                        'PO2' => 3,
+                        'PO3' => 3,
+                        'PO5' => 2,
+                        'PO9' => 2,
+                        'PO12' => 2,
+                    ];
+
                     foreach ($mapPos as $poKey => $lvl) {
+
                         if (isset($createdPos[$poKey])) {
+
+                            $correlationLevel = max(
+                                1,
+                                min(
+                                    3,
+                                    $lvl + (($coNumber % 3) - 1)
+                                )
+                            );
+
                             CoPoMapping::create([
                                 'course_outcome_id' => $co->id,
                                 'target_type' => 'PO',
                                 'target_id' => $createdPos[$poKey]->id,
-                                'correlation_level' => max(1, ($lvl + ($i % 2) - 1)),
-                                'justification' => "Course outcome directly enhances competence in {$poKey}.",
+                                'correlation_level' => $correlationLevel,
+                                'justification' => "The {$co['co_code']} outcome of {$c['name']} contributes to {$poKey} through course-specific knowledge, analysis and practical application.",
                             ]);
                         }
                     }
 
-                    // Map CO to PSOs
+                    // CO-PSO articulation
                     foreach ($createdPsos as $psoKey => $psoModel) {
+
                         CoPoMapping::create([
                             'course_outcome_id' => $co->id,
                             'target_type' => 'PSO',
                             'target_id' => $psoModel->id,
                             'correlation_level' => 2,
-                            'justification' => "Maps to {$psoKey} industry competencies.",
+                            'justification' => "The {$co['co_code']} outcome supports {$psoKey} through application of computing knowledge and industry-oriented skills.",
                         ]);
                     }
 
-                    // Create Student Assessments for CIE and SEE
+                    // CIE Assessment
                     StudentAssessment::create([
                         'course_id' => $course->id,
                         'course_outcome_id' => $co->id,
@@ -345,6 +703,7 @@ class NbaSarDatabaseSeeder extends Seeder
                         'attainment_level' => 2.8,
                     ]);
 
+                    // SEE Assessment
                     StudentAssessment::create([
                         'course_id' => $course->id,
                         'course_outcome_id' => $co->id,
@@ -356,7 +715,7 @@ class NbaSarDatabaseSeeder extends Seeder
                         'attainment_level' => 2.6,
                     ]);
 
-                    // Attainment Result
+                    // CO Attainment Result
                     AttainmentResult::create([
                         'course_outcome_id' => $co->id,
                         'academic_year_id' => $cay->id,
@@ -369,7 +728,6 @@ class NbaSarDatabaseSeeder extends Seeder
                 }
             }
         }
-
         // 8. Indirect Assessments (Surveys)
         if (IndirectAssessment::where('program_id', $prog->id)->count() === 0) {
             foreach ($createdPos as $poCode => $poModel) {
@@ -399,8 +757,11 @@ class NbaSarDatabaseSeeder extends Seeder
             StudentPlacement::create(['program_id' => $prog->id, 'academic_year_id' => $caym2->id, 'final_year_students' => 118, 'placed_students' => 88, 'higher_studies_students' => 15, 'entrepreneurs_count' => 2, 'median_salary_lpa' => 6.5]);
         }
 
-        // 10. Financial Budgets (Criterion 10)
+             // 10. Financial Budgets (Criterion 10)
+        // Three-year recurring and non-recurring budget ledger
         if (FinancialBudget::where('program_id', $prog->id)->count() === 0) {
+
+            // ==================== 2024-25 (CFY) ====================
             $cfyBudget = FinancialBudget::create([
                 'institution_id' => $inst->id,
                 'program_id' => $prog->id,
@@ -411,11 +772,41 @@ class NbaSarDatabaseSeeder extends Seeder
                 'total_actual_expenditure' => 7950000.00,
                 'utilization_percentage' => 93.53,
             ]);
-            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'Faculty & Staff Salaries', 'budget_allocated' => 5200000.00, 'actual_expenditure' => 5180000.00]);
-            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'Software Licenses, Cloud & Subscriptions', 'budget_allocated' => 800000.00, 'actual_expenditure' => 780000.00]);
-            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Recurring', 'sub_category' => 'R&D, Conferences & Faculty Travel', 'budget_allocated' => 500000.00, 'actual_expenditure' => 490000.00]);
-            BudgetItem::create(['financial_budget_id' => $cfyBudget->id, 'category' => 'Non-Recurring', 'sub_category' => 'AI & GPU Lab Infrastructure Upgrade', 'budget_allocated' => 2000000.00, 'actual_expenditure' => 1500000.00]);
 
+            BudgetItem::create([
+                'financial_budget_id' => $cfyBudget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Faculty & Staff Salaries',
+                'budget_allocated' => 5200000.00,
+                'actual_expenditure' => 5180000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfyBudget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Software Licenses, Cloud & Subscriptions',
+                'budget_allocated' => 800000.00,
+                'actual_expenditure' => 780000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfyBudget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'R&D, Conferences & Faculty Development',
+                'budget_allocated' => 500000.00,
+                'actual_expenditure' => 490000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfyBudget->id,
+                'category' => 'Non-Recurring',
+                'sub_category' => 'AI & GPU Lab Infrastructure Upgrade',
+                'budget_allocated' => 2000000.00,
+                'actual_expenditure' => 1500000.00,
+            ]);
+
+
+            // ==================== 2023-24 (CFYm1) ====================
             $cfym1Budget = FinancialBudget::create([
                 'institution_id' => $inst->id,
                 'program_id' => $prog->id,
@@ -426,8 +817,91 @@ class NbaSarDatabaseSeeder extends Seeder
                 'total_actual_expenditure' => 7420000.00,
                 'utilization_percentage' => 95.13,
             ]);
-            BudgetItem::create(['financial_budget_id' => $cfym1Budget->id, 'category' => 'Recurring', 'sub_category' => 'Faculty & Staff Salaries', 'budget_allocated' => 4800000.00, 'actual_expenditure' => 4790000.00]);
-            BudgetItem::create(['financial_budget_id' => $cfym1Budget->id, 'category' => 'Non-Recurring', 'sub_category' => 'IoT & Embedded Systems Lab Setup', 'budget_allocated' => 1800000.00, 'actual_expenditure' => 1650000.00]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym1Budget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Faculty & Staff Salaries',
+                'budget_allocated' => 4700000.00,
+                'actual_expenditure' => 4650000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym1Budget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Software Licenses & Cloud Services',
+                'budget_allocated' => 700000.00,
+                'actual_expenditure' => 660000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym1Budget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'R&D, Conferences & Faculty Travel',
+                'budget_allocated' => 500000.00,
+                'actual_expenditure' => 460000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym1Budget->id,
+                'category' => 'Non-Recurring',
+                'sub_category' => 'IoT & Embedded Systems Lab Setup',
+                'budget_allocated' => 1900000.00,
+                'actual_expenditure' => 1650000.00,
+            ]);
+
+
+            // ==================== 2022-23 (CFYm2) ====================
+            $cfym2Budget = FinancialBudget::create([
+                'institution_id' => $inst->id,
+                'program_id' => $prog->id,
+                'academic_year_id' => $caym2->id,
+                'financial_year_name' => '2022-23 (CFYm2)',
+                'cfy_type' => 'CFYm2',
+                'total_budget_allocated' => 7100000.00,
+                'total_actual_expenditure' => 6680000.00,
+                'utilization_percentage' => 94.08,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym2Budget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Faculty & Staff Salaries',
+                'budget_allocated' => 4300000.00,
+                'actual_expenditure' => 4220000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym2Budget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Software Licenses & IT Services',
+                'budget_allocated' => 600000.00,
+                'actual_expenditure' => 560000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym2Budget->id,
+                'category' => 'Recurring',
+                'sub_category' => 'Research, Training & Faculty Travel',
+                'budget_allocated' => 400000.00,
+                'actual_expenditure' => 350000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym2Budget->id,
+                'category' => 'Non-Recurring',
+                'sub_category' => 'Computer Laboratory Equipment',
+                'budget_allocated' => 1400000.00,
+                'actual_expenditure' => 1200000.00,
+            ]);
+
+            BudgetItem::create([
+                'financial_budget_id' => $cfym2Budget->id,
+                'category' => 'Non-Recurring',
+                'sub_category' => 'Network & Infrastructure Upgrade',
+                'budget_allocated' => 400000.00,
+                'actual_expenditure' => 350000.00,
+            ]);
         }
 
         // 11. Master SAR Report
