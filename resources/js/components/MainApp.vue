@@ -119,7 +119,21 @@
                 <AppIcon name="target" size="15" :custom-class="activeView === 'attainment' ? 'text-white' : 'text-slate-400'" />
                 <span>Attainment & Marks Entry</span>
               </button>
-            </nav>
+
+<button
+    @click="activeView = 'surveys'"
+    class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
+    :class="activeView === 'surveys' ? 'bg-indigo-600 text-white shadow-sm font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/60'"
+>
+    <AppIcon
+        name="users"
+        size="15"
+        :custom-class="activeView === 'surveys' ? 'text-white' : 'text-slate-400'"
+    />
+    <span>Stakeholder Surveys</span>
+</button>
+
+</nav>
           </div>
 
           <!-- Section 4: Criteria Calculation Engines -->
@@ -264,30 +278,34 @@
             <section v-if="activeView === 'attainment'">
               <AttainmentDashboard :attainment="sarData.live_engines?.attainment" :program-id="sarData.program?.id" @updated="refreshData" />
             </section>
+            <!-- 9. Stakeholder Survey Management -->
+<section v-if="activeView === 'surveys'">
+  <StakeholderSurveyView />
+</section>
 
-            <!-- 9. SFR & FQI Engine View -->
+            <!-- 10. SFR & FQI Engine View -->
             <section v-if="activeView === 'sfr_fqi'">
               <SfrSimulator :sfr="sarData.live_engines?.sfr" :program="sarData.program" />
               <div class="my-8 border-t border-slate-800"></div>
               <FqiSimulator :fqi="sarData.live_engines?.fqi" :cadre="sarData.live_engines?.cadre" :program="sarData.program" />
             </section>
 
-            <!-- 10. Financial & Governance View -->
+            <!-- 11. Financial & Governance View -->
             <section v-if="activeView === 'finance'">
               <FinanceGovernanceView :sar="sarData" />
             </section>
 
-            <!-- 11. Criteria 1 to 10 View -->
+            <!-- 12. Criteria 1 to 10 View -->
             <section v-if="activeView === 'criteria'">
               <CriteriaExplorer :criteria="sarData.criteria" :sar="sarData" />
             </section>
 
-            <!-- 12. SAR Workflow View -->
+            <!-- 13. SAR Workflow View -->
             <section v-if="activeView === 'workflow'">
               <SarWorkflowPanel :report-id="sarData.report_id" @state-changed="refreshData" />
             </section>
 
-            <!-- 13. Printable Official SAR Document -->
+            <!-- 14. Printable Official SAR Document -->
             <section v-if="activeView === 'document'">
               <PrintableSarReport :sar="sarData" />
             </section>
@@ -312,6 +330,7 @@ import SfrSimulator from './SfrSimulator.vue';
 import FqiSimulator from './FqiSimulator.vue';
 import ArticulationMatrixEditor from './ArticulationMatrixEditor.vue';
 import AttainmentDashboard from './AttainmentDashboard.vue';
+import StakeholderSurveyView from './StakeholderSurveyView.vue';
 import FinanceGovernanceView from './FinanceGovernanceView.vue';
 import CriteriaExplorer from './CriteriaExplorer.vue';
 import SarWorkflowPanel from './SarWorkflowPanel.vue';
@@ -332,6 +351,7 @@ export default {
     FqiSimulator,
     ArticulationMatrixEditor,
     AttainmentDashboard,
+    StakeholderSurveyView,
     FinanceGovernanceView,
     CriteriaExplorer,
     SarWorkflowPanel,
@@ -365,6 +385,7 @@ export default {
         courses: 'Course Catalog & Outcome Definitions (COs)',
         matrix: 'Curriculum Articulation Matrix (CO-PO)',
         attainment: 'Direct & Indirect Attainment Pipeline',
+        surveys: 'Stakeholder Survey Management',
         sfr_fqi: 'Faculty Indices (SFR & FQI Calculation)',
         finance: 'Financial Resources & Budget Utilization',
         criteria: 'Criteria 1 - 10 Self-Assessment Breakdown',

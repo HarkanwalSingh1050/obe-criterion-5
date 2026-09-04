@@ -49,10 +49,14 @@ Route::prefix('v1')->group(function () {
     });
 
     // 5. Direct & Indirect Attainment Mark Logging
-    Route::prefix('attainment')->group(function () {
-        Route::post('/record-marks', [AssessmentEntryApiController::class, 'recordMarks']);
-        Route::post('/record-survey', [AssessmentEntryApiController::class, 'recordSurvey']);
-    });
+   Route::prefix('attainment')->group(function () {
+    Route::post('/record-marks', [AssessmentEntryApiController::class, 'recordMarks']);
+    Route::post('/record-survey', [AssessmentEntryApiController::class, 'recordSurvey']);
+    Route::get('/surveys', [AssessmentEntryApiController::class, 'surveys']);
+    Route::get('/survey-options', [AssessmentEntryApiController::class, 'surveyOptions']);
+    Route::put('/surveys/{id}', [AssessmentEntryApiController::class, 'updateSurvey']);
+    Route::delete('/surveys/{id}', [AssessmentEntryApiController::class, 'destroySurvey']);
+});
 
     // 6. NBA SAR Engines & Matrices
     Route::prefix('nba')->group(function () {
