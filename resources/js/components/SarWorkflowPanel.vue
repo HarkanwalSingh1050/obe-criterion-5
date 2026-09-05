@@ -92,7 +92,7 @@
       </div>
 
       <div class="flex justify-end">
-        <button @click="executeTransition" :disabled="submitting"
+        <button @click="openApprovalModal" :disabled="submitting"
                 class="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition disabled:opacity-50">
           <span>🚀</span> Execute Transition & Log Audit Trail
         </button>
@@ -131,6 +131,88 @@
       </div>
     </div>
   </div>
+  <!-- Approval Confirmation Modal -->
+<div
+  v-if="showApprovalModal"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+>
+  <div class="w-full max-w-lg rounded-xl border border-slate-700 bg-slate-900 p-6 shadow-2xl">
+    <div class="mb-5 flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-bold text-white">
+          Confirm SAR State Transition
+        </h3>
+        <p class="mt-1 text-sm text-slate-400">
+          Please review the approval details before continuing.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="text-xl text-slate-400 hover:text-white"
+        @click="showApprovalModal = false"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="space-y-3 rounded-lg border border-slate-700 bg-slate-950 p-4">
+      <div class="flex justify-between gap-4">
+        <span class="text-sm text-slate-400">Current State</span>
+        <span class="text-sm font-semibold text-white">
+          {{ workflow.current_state }}
+        </span>
+      </div>
+
+      <div class="flex justify-between gap-4">
+        <span class="text-sm text-slate-400">Target State</span>
+        <span class="text-sm font-semibold text-indigo-300">
+          {{ form.targetState }}
+        </span>
+      </div>
+
+      <div class="flex justify-between gap-4">
+        <span class="text-sm text-slate-400">Officer</span>
+        <span class="text-sm font-semibold text-white">
+          {{ form.userName }}
+        </span>
+      </div>
+
+      <div class="flex justify-between gap-4">
+        <span class="text-sm text-slate-400">Role</span>
+        <span class="text-sm font-semibold text-white">
+          {{ form.userRole }}
+        </span>
+      </div>
+
+      <div>
+        <p class="mb-1 text-sm text-slate-400">Remarks</p>
+        <p class="text-sm text-white">
+          {{ form.remarks || 'No remarks provided.' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-5 flex justify-end gap-3">
+      <button
+        type="button"
+        class="rounded-lg border border-slate-600 px-4 py-2 text-sm font-semibold text-slate-300 hover:bg-slate-800"
+        @click="showApprovalModal = false"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
+        :disabled="submitting"
+        @click="executeTransition"
+      >
+        {{ submitting ? 'Processing...' : 'Confirm & Approve' }}
+      </button>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
@@ -148,6 +230,7 @@ export default {
     return {
       workflow: {},
       submitting: false,
+      showApprovalModal: false,
       form: {
         userName: 'Dr. Arvind Mehra',
         userRole: 'HOD',
@@ -180,6 +263,10 @@ export default {
         console.error('Failed to load workflow:', err);
       }
     },
+    openApprovalModal() {
+      if (!this.form.targetState) return;
+      this.showApprovalModal = true;
+    },
     async executeTransition() {
       if (!this.form.targetState) return;
       this.submitting = true;
@@ -191,9 +278,10 @@ export default {
           remarks: this.form.remarks,
         });
         if (res.data && res.data.success) {
-          this.fetchWorkflow();
-          this.$emit('state-changed');
-        }
+  this.showApprovalModal = false;
+  this.fetchWorkflow();
+  this.$emit('state-changed');
+}
       } catch (err) {
         alert(err.response?.data?.message || 'Transition failed');
       } finally {

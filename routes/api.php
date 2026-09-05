@@ -81,6 +81,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/workflow/{reportId}', [SarWorkflowApiController::class, 'getStatus']);
         Route::post('/workflow/{reportId}/transition', [SarWorkflowApiController::class, 'transition']);
 
+        // SAR Evidence
+        Route::get('/workflow/{reportId}/criteria/{criterionId}/evidence', [\App\Http\Controllers\Api\V1\SarEvidenceApiController::class, 'index']);
+        Route::post('/workflow/{reportId}/criteria/{criterionId}/evidence', [\App\Http\Controllers\Api\V1\SarEvidenceApiController::class, 'upload']);
+        Route::delete('/evidence/{evidenceId}', [\App\Http\Controllers\Api\V1\SarEvidenceApiController::class, 'destroy']);
+        Route::get('/evidence/{evidenceId}/download', [\App\Http\Controllers\Api\V1\SarEvidenceApiController::class, 'download']);
+
         // Export Full SAR Report
         Route::get('/export/{reportId}', [SarReportExportApiController::class, 'getFullDocument']);
     });

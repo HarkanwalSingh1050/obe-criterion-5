@@ -83,6 +83,54 @@
               </div>
             </div>
           </div>
+
+          <!-- Evidence Documents Section -->
+          <div class="mt-6 border-t border-slate-800 pt-4">
+            <div class="flex items-center justify-between mb-3">
+              <h5 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <span>📎</span> Supporting Evidence (PDF)
+              </h5>
+              
+              <div v-if="!sar.is_locked">
+                <label :for="'upload-' + c.number" class="cursor-pointer px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition flex items-center gap-1">
+                  <span v-if="uploading[c.number]">Uploading...</span>
+                  <span v-else>+ Upload PDF</span>
+                </label>
+                <input type="file" :id="'upload-' + c.number" accept=".pdf" class="hidden" :disabled="uploading[c.number]" @change="uploadEvidence($event, c.number)" />
+              </div>
+              <div v-else>
+                <span class="px-3 py-1 rounded bg-slate-800 text-slate-400 text-xs font-medium border border-slate-700">🔒 SAR Locked</span>
+              </div>
+            </div>
+
+            <div v-if="!evidences[c.number] || evidences[c.number].length === 0" class="p-4 rounded-lg bg-slate-900/50 border border-slate-800/50 text-center">
+              <span class="text-xs text-slate-500">No evidence documents uploaded yet for Criterion {{ c.number }}.</span>
+            </div>
+            
+            <div v-else class="space-y-2">
+              <div v-for="ev in evidences[c.number]" :key="ev.id" class="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded bg-rose-500/10 text-rose-400 flex items-center justify-center">
+                    📄
+                  </span>
+                  <div>
+                    <div class="text-xs font-medium text-slate-200">{{ ev.file_name }}</div>
+                    <div class="text-[10px] text-slate-500">Uploaded by {{ ev.uploaded_by }} • {{ new Date(ev.created_at).toLocaleDateString() }}</div>
+                  </div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                  <button @click="downloadEvidence(ev)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] transition font-medium border border-slate-700">
+                    Download
+                  </button>
+                  <button v-if="!sar.is_locked" @click="deleteEvidence(ev.id, c.number)" class="px-2.5 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[10px] transition font-medium border border-rose-500/20">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -90,6 +138,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'CriteriaExplorer',
   props: {
@@ -105,12 +155,81 @@ export default {
   data() {
     return {
       expanded: 1,
+      evidences: {},
+      uploading: {},
     };
+  },
+  mounted() {
+    if (this.expanded && this.sar.report_id) {
+      this.fetchEvidences(this.expanded);
+    }
+  },
+  watch: {
+    'sar.report_id': function(newVal) {
+      if (newVal && this.expanded) {
+        this.fetchEvidences(this.expanded);
+      }
+    }
   },
   methods: {
     toggleExpand(num) {
       this.expanded = this.expanded === num ? null : num;
+      if (this.expanded && this.sar.report_id) {
+        this.fetchEvidences(num);
+      }
     },
+    async fetchEvidences(criterionNumber) {
+      try {
+        const res = await axios.get(`/api/v1/nba/workflow/${this.sar.report_id}/criteria/${criterionNumber}/evidence`);
+        if (res.data && res.data.success) {
+          this.evidences = {
+            ...this.evidences,
+            [criterionNumber]: res.data.data
+          };
+        }
+      } catch (err) {
+        console.error('Failed to fetch evidence:', err);
+      }
+    },
+    async uploadEvidence(event, criterionNumber) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('evidence_file', file);
+
+      this.uploading = { ...this.uploading, [criterionNumber]: true };
+      
+      try {
+        const res = await axios.post(`/api/v1/nba/workflow/${this.sar.report_id}/criteria/${criterionNumber}/evidence`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        
+        if (res.data && res.data.success) {
+          event.target.value = ''; // reset file input
+          this.fetchEvidences(criterionNumber); // reload evidence list
+        }
+      } catch (err) {
+        alert(err.response?.data?.message || 'Failed to upload evidence.');
+      } finally {
+        this.uploading = { ...this.uploading, [criterionNumber]: false };
+      }
+    },
+    async deleteEvidence(evidenceId, criterionNumber) {
+      if (!confirm('Are you sure you want to delete this evidence file?')) return;
+      
+      try {
+        const res = await axios.delete(`/api/v1/nba/evidence/${evidenceId}`);
+        if (res.data && res.data.success) {
+          this.fetchEvidences(criterionNumber);
+        }
+      } catch (err) {
+        alert('Failed to delete evidence.');
+      }
+    },
+    downloadEvidence(ev) {
+      window.open(`/api/v1/nba/evidence/${ev.id}/download`, '_blank');
+    }
   },
 };
 </script>

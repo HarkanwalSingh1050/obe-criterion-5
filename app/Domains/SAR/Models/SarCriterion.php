@@ -21,4 +21,9 @@ class SarCriterion extends Model
     {
         return $this->belongsTo(SarReport::class);
     }
+
+    public function evidences()
+    {
+        return $this->hasMany(SarEvidence::class, 'sar_criterion_id');
+    }
 }
