@@ -187,5 +187,21 @@ Route::prefix('v1')->group(function () {
             '/export/{reportId}',
             [SarReportExportApiController::class, 'getFullDocument']
         );
+
+        // Criterion 5 - Dedicated Endpoint under NBA
+        Route::get('/criterion-5', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'index']);
+    });
+
+    // 8. NBA Criterion 5 – Faculty Information & Contributions Management
+    Route::prefix('sar/criterion-5')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'index']);
+        Route::get('/faculty', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'facultyList']);
+        Route::post('/faculty', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'storeFaculty']);
+        Route::put('/faculty/{id}', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'updateFaculty']);
+        Route::delete('/faculty/{id}', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'destroyFaculty']);
+
+        Route::post('/visiting-faculty', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'storeVisitingFaculty']);
+        Route::put('/visiting-faculty/{id}', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'updateVisitingFaculty']);
+        Route::delete('/visiting-faculty/{id}', [\App\Http\Controllers\Api\V1\CriterionFiveApiController::class, 'destroyVisitingFaculty']);
     });
 });

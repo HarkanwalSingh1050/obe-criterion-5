@@ -70,6 +70,44 @@
             </div>
           </div>
 
+          <!-- Criterion 5 In-Depth Data -->
+          <div v-if="c.number === 5" class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="font-bold text-white text-sm">Criterion 5: Faculty Information & Contributions</span>
+                <p class="text-[11px] text-slate-400 mt-0.5">Tier-II Evaluated Cycle (CAY, CAYm1, CAYm2) • 5 Sub-criteria Assessment</p>
+              </div>
+              <button
+                @click="$emit('navigate', 'criterion5')"
+                class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md transition flex items-center gap-1.5 shrink-0"
+              >
+                <span>🚀</span> Open Full Criterion 5 Module (5.1 - 5.5)
+              </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+                <div class="text-slate-400 text-[10px] uppercase font-semibold">5.1 SFR (Avg: 19.04)</div>
+                <div class="font-bold text-emerald-400 font-mono text-sm mt-0.5">{{ sar.live_engines?.criterion5?.sub_criteria?.['5.1']?.claimed_marks || 18.0 }} <span class="text-slate-500 text-[10px] font-normal">/ 30</span></div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+                <div class="text-slate-400 text-[10px] uppercase font-semibold">5.2 FQI (Avg: 22.12)</div>
+                <div class="font-bold text-emerald-400 font-mono text-sm mt-0.5">{{ sar.live_engines?.criterion5?.sub_criteria?.['5.2']?.claimed_marks || 22.12 }} <span class="text-slate-500 text-[10px] font-normal">/ 25</span></div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+                <div class="text-slate-400 text-[10px] uppercase font-semibold">5.3 Cadre (1:2:6)</div>
+                <div class="font-bold text-emerald-400 font-mono text-sm mt-0.5">{{ sar.live_engines?.criterion5?.sub_criteria?.['5.3']?.claimed_marks || 20.69 }} <span class="text-slate-500 text-[10px] font-normal">/ 25</span></div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+                <div class="text-slate-400 text-[10px] uppercase font-semibold">5.4 Visiting Faculty</div>
+                <div class="font-bold text-emerald-400 font-mono text-sm mt-0.5">{{ sar.live_engines?.criterion5?.sub_criteria?.['5.4']?.claimed_marks || 10.0 }} <span class="text-slate-500 text-[10px] font-normal">/ 10</span></div>
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+                <div class="text-slate-400 text-[10px] uppercase font-semibold">5.5 Retention</div>
+                <div class="font-bold text-emerald-400 font-mono text-sm mt-0.5">{{ sar.live_engines?.criterion5?.sub_criteria?.['5.5']?.claimed_marks || 7.83 }} <span class="text-slate-500 text-[10px] font-normal">/ 10</span></div>
+              </div>
+            </div>
+          </div>
+
           <div v-if="c.number === 10" class="p-3 rounded-lg bg-slate-900 border border-slate-800 text-xs space-y-2">
             <div class="font-semibold text-indigo-300">Criterion 10 Budget & Governance Snapshot:</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -227,6 +265,7 @@ import axios from 'axios';
 
 export default {
   name: 'CriteriaExplorer',
+  emits: ['navigate'],
   props: {
     criteria: {
       type: Array,

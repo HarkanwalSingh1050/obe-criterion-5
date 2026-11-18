@@ -407,7 +407,7 @@
           </div>
 
           <!-- Section 4 -->
-          <div v-if="hasAccess('sfr_fqi') || hasAccess('finance') || hasAccess('criteria')">
+          <div v-if="hasAccess('criterion5') || hasAccess('sfr_fqi') || hasAccess('finance') || hasAccess('criteria')">
             <div
               class="px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5"
             >
@@ -415,6 +415,29 @@
             </div>
 
             <nav class="space-y-0.5">
+              <button
+                v-if="hasAccess('criterion5')"
+                @click="activeView = 'criterion5'"
+                class="w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2.5 transition text-left"
+                :class="
+                  activeView === 'criterion5'
+                    ? 'bg-indigo-600 text-white shadow-sm font-semibold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                "
+              >
+                <AppIcon
+                  name="users"
+                  size="15"
+                  :custom-class="
+                    activeView === 'criterion5'
+                      ? 'text-white'
+                      : 'text-slate-400'
+                  "
+                />
+
+                <span>Criterion 5 – Faculty Info</span>
+              </button>
+
               <button
                 v-if="hasAccess('sfr_fqi')"
                 @click="activeView = 'sfr_fqi'"
@@ -799,6 +822,15 @@
               />
             </section>
 
+            <!-- 14b. Criterion 5 Full Module -->
+            <section v-else-if="activeView === 'criterion5'">
+              <CriterionFiveView
+                :program-id="sarData.program?.id"
+                :sar="sarData"
+                @navigate="(view) => (activeView = view)"
+              />
+            </section>
+
             <!-- 15. Finance -->
             <section v-else-if="activeView === 'finance'">
               <FinanceGovernanceView :sar="sarData" />
@@ -809,6 +841,7 @@
               <CriteriaExplorer
                 :criteria="sarData.criteria"
                 :sar="sarData"
+                @navigate="(view) => (activeView = view)"
               />
             </section>
 
@@ -856,6 +889,7 @@ import SarWorkflowPanel from './SarWorkflowPanel.vue';
 import PrintableSarReport from './PrintableSarReport.vue';
 import StudentMarksUploadView from './StudentMarksUploadView.vue';
 import CoursePerformanceView from './CoursePerformanceView.vue';
+import CriterionFiveView from './CriterionFiveView.vue';
 
 export default {
   name: 'MainApp',
@@ -882,6 +916,7 @@ export default {
     SarWorkflowPanel,
     PrintableSarReport,
     CoursePerformanceView,
+    CriterionFiveView,
   },
 
   data() {
@@ -923,6 +958,7 @@ export default {
         attainment: ['Super Admin', 'HOD', 'Faculty'],
         surveys: ['Super Admin', 'HOD', 'Faculty', 'IQAC Admin'],
         sfr_fqi: ['Super Admin', 'HOD', 'IQAC Admin'],
+        criterion5: ['Super Admin', 'HOD', 'Faculty', 'IQAC Admin', 'Evaluator'],
         finance: ['Super Admin', 'HOD', 'IQAC Admin'],
         criteria: ['Super Admin', 'HOD', 'Faculty', 'IQAC Admin', 'Evaluator'],
         workflow: ['Super Admin', 'HOD', 'IQAC Admin', 'Evaluator'],
@@ -946,6 +982,7 @@ export default {
         attainment: 'Direct & Indirect Attainment Pipeline',
         surveys: 'Stakeholder Survey Management',
         sfr_fqi: 'Faculty Indices (SFR & FQI Calculation)',
+        criterion5: 'Criterion 5: Faculty Information & Contributions',
         finance: 'Financial Resources & Budget Utilization',
         criteria: 'Criteria 1 - 10 Self-Assessment Breakdown',
         workflow: 'SAR Approval State Machine & Audit Trail',
